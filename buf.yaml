@@ -1,0 +1,12 @@
+version: v2
+modules:
+  - path: proto
+lint:
+  use:
+    - STANDARD
+  except:
+    - IMPORT_NO_PUBLIC
+    - PACKAGE_DIRECTORY_MATCH
+breaking:
+  use:
+    - FILE

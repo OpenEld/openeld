@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package openeld.common.primitives.v1;
+
+// * Represents a reusable identifier value.
+message Identifier {
+  string value = 1;
+}
+
+// * References another entity by identifier and logical type.
+message EntityReference {
+  string id = 1;
+  string entity_type = 2;
+}
+
+// * Captures a provider or external system identifier.
+message ExternalIdentifier {
+  string namespace = 1;
+  string value = 2;
+  optional string label = 3;
+}

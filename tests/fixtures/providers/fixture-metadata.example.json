@@ -1,0 +1,13 @@
+{
+  "provider": "samsara",
+  "resource": "hos_logs",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.example.com/reference/example",
+  "apiVersion": "v1",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "sandbox-token",
+  "sanitized": true,
+  "sanitizationNotes": "Replace IDs, coordinates, and personal information before committing.",
+  "supportedDomains": ["driver", "vehicle", "hos_event", "gps_location"],
+  "notes": "Replace this example with authoritative provider metadata for each committed fixture set."
+}

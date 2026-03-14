@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package openeld.v1;
+
+import public "common/metadata/audit.proto";
+import public "common/metadata/source.proto";
+import public "common/primitives/ids.proto";
+import public "common/primitives/location.proto";
+import public "common/primitives/time.proto";
+import public "common/units/measurements.proto";
+import public "logistics/asset.proto";
+import public "logistics/asset_location.proto";
+import public "logistics/carrier.proto";
+import public "logistics/data_consent.proto";
+import public "logistics/driver.proto";
+import public "logistics/dvir.proto";
+import public "logistics/enums.proto";
+import public "logistics/gps_location.proto";
+import public "logistics/hos_daily_summary.proto";
+import public "logistics/hos_event.proto";
+import public "logistics/ifta_trip.proto";
+import public "logistics/safety_event.proto";
+import public "logistics/vehicle.proto";
+import public "logistics/vehicle_assignment.proto";
+import public "providers/eld/geotab/contracts.proto";
+import public "providers/eld/keeptruckin/contracts.proto";
+import public "providers/eld/motive/contracts.proto";
+import public "providers/eld/samsara/contracts.proto";
+import public "providers/eld/shared/common.proto";
+import public "providers/telematics/fleet_complete/contracts.proto";
+import public "providers/telematics/fourkites/contracts.proto";
+import public "providers/telematics/project44/contracts.proto";
+import public "providers/telematics/shared/common.proto";
+import public "providers/telematics/verizon_connect/contracts.proto";
+import public "services/ingestion/service.proto";
+import public "services/normalization/service.proto";
+import public "services/query/service.proto";
+import public "services/sync/service.proto";
+

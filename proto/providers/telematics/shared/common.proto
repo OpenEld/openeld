@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package openeld.providers.telematics.shared.v1;
+
+import "common/metadata/source.proto";
+import "common/primitives/location.proto";
+import "google/protobuf/timestamp.proto";
+
+// * Represents a provider-specific asset record from a telematics source.
+message TelematicsAssetRecord {
+  string provider_asset_id = 1;
+  optional string vin = 2;
+  optional string name = 3;
+  optional string license_plate = 4;
+  optional string device_id = 5;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Represents a provider-specific position record from a telematics source.
+message TelematicsPositionRecord {
+  string provider_position_id = 1;
+  optional string provider_asset_id = 2;
+  optional google.protobuf.Timestamp timestamp = 3;
+  optional openeld.common.primitives.v1.GeoPoint position = 4;
+  optional double speed_kilometers_per_hour = 5;
+  optional double heading_degrees = 6;
+  optional double odometer_meters = 7;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Represents a provider-specific trip or stop update from a telematics source.
+message TelematicsTripRecord {
+  string provider_trip_id = 1;
+  optional string provider_asset_id = 2;
+  optional string shipment_id = 3;
+  optional string status = 4;
+  optional google.protobuf.Timestamp start_time = 5;
+  optional google.protobuf.Timestamp end_time = 6;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Tracks incremental sync state for a telematics provider.
+message TelematicsSyncCheckpoint {
+  optional string cursor = 1;
+  optional string page_token = 2;
+  optional string version_token = 3;
+  optional google.protobuf.Timestamp synced_through = 4;
+}

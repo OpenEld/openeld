@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+import "common/metadata/audit.proto";
+import "common/metadata/source.proto";
+import "logistics/enums.proto";
+
+// * Represents a non-powered or auxiliary asset such as a trailer or chassis.
+message Asset {
+  string asset_id = 1;
+  string carrier_id = 2;
+  AssetType asset_type = 3;
+  string asset_number = 4;
+  optional string vin = 5;
+  optional string make = 6;
+  optional string model = 7;
+  optional int32 year = 8;
+  optional string license_plate = 9;
+  optional string license_state = 10;
+  AssetStatus status = 11;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.common.metadata.v1.AuditMetadata audit = 21;
+}

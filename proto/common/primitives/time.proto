@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package openeld.common.primitives.v1;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+// * Represents a calendar date without a timezone.
+message LocalDate {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+}
+
+// * Represents a bounded time window.
+message TimeRange {
+  google.protobuf.Timestamp start_time = 1;
+  optional google.protobuf.Timestamp end_time = 2;
+}
+
+// * Represents a duration summary using protobuf's cross-language duration type.
+message DurationValue {
+  google.protobuf.Duration value = 1;
+}

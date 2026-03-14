@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package openeld.providers.eld.keeptruckin.v1;
+
+import "google/protobuf/timestamp.proto";
+import "providers/eld/shared/common.proto";
+
+// * Represents a legacy KeepTruckin driver record.
+message KeeptruckinDriverRecord {
+  string id = 1;
+  optional string first_name = 2;
+  optional string last_name = 3;
+  optional string status = 4;
+  optional string license_number = 5;
+  optional openeld.providers.eld.shared.v1.EldDriverRecord normalized_projection = 20;
+}
+
+// * Represents a legacy KeepTruckin vehicle record.
+message KeeptruckinVehicleRecord {
+  string id = 1;
+  optional string number = 2;
+  optional string vin = 3;
+  optional double odometer_meters = 4;
+  optional double engine_hours_seconds = 5;
+  optional openeld.providers.eld.shared.v1.EldVehicleRecord normalized_projection = 20;
+}
+
+// * Represents a legacy KeepTruckin log record.
+message KeeptruckinLogRecord {
+  string id = 1;
+  optional string driver_id = 2;
+  optional string vehicle_id = 3;
+  optional google.protobuf.Timestamp start_time = 4;
+  optional google.protobuf.Timestamp end_time = 5;
+  optional string status = 6;
+  optional double latitude = 7;
+  optional double longitude = 8;
+  optional string origin = 9;
+  optional string annotation = 10;
+  optional openeld.providers.eld.shared.v1.EldHosEventRecord normalized_projection = 20;
+}
+
+// * Represents a legacy KeepTruckin HOS clock record.
+message KeeptruckinHosClockRecord {
+  string driver_id = 1;
+  optional double drive_remaining_seconds = 2;
+  optional double shift_remaining_seconds = 3;
+  optional double cycle_remaining_seconds = 4;
+  optional openeld.providers.eld.shared.v1.EldHosClockRecord normalized_projection = 20;
+}
+
+// * Represents a legacy KeepTruckin location record.
+message KeeptruckinLocationRecord {
+  string id = 1;
+  optional string vehicle_id = 2;
+  optional string driver_id = 3;
+  optional google.protobuf.Timestamp timestamp = 4;
+  optional double latitude = 5;
+  optional double longitude = 6;
+  optional double speed_kilometers_per_hour = 7;
+  optional double heading_degrees = 8;
+  optional openeld.providers.eld.shared.v1.EldGpsLocationRecord normalized_projection = 20;
+}
+
+// * Represents a legacy KeepTruckin DVIR record.
+message KeeptruckinDvirRecord {
+  string id = 1;
+  optional string driver_id = 2;
+  optional string vehicle_id = 3;
+  optional google.protobuf.Timestamp inspection_time = 4;
+  optional string inspection_type = 5;
+  optional bool is_safe_to_drive = 6;
+  repeated string defect_descriptions = 7;
+  optional string mechanic_notes = 8;
+  optional openeld.providers.eld.shared.v1.EldDvirRecord normalized_projection = 20;
+}
+
+// * Represents a legacy KeepTruckin diagnostic record.
+message KeeptruckinDiagnosticRecord {
+  string id = 1;
+  optional string driver_id = 2;
+  optional string vehicle_id = 3;
+  optional google.protobuf.Timestamp detected_at = 4;
+  optional string type = 5;
+  optional string code = 6;
+  optional string description = 7;
+  optional bool active = 8;
+  optional openeld.providers.eld.shared.v1.EldDiagnosticRecord normalized_projection = 20;
+}
+
+// * Groups the stable subset of KeepTruckin records used by the normalization layer.
+message KeeptruckinPayload {
+  optional openeld.providers.eld.shared.v1.EldPayloadMetadata metadata = 1;
+  repeated KeeptruckinDriverRecord drivers = 2;
+  repeated KeeptruckinVehicleRecord vehicles = 3;
+  repeated openeld.providers.eld.shared.v1.EldVehicleAssignmentRecord vehicle_assignments = 4;
+  repeated KeeptruckinLogRecord hos_logs = 5;
+  repeated KeeptruckinHosClockRecord hos_clocks = 6;
+  repeated KeeptruckinLocationRecord gps_locations = 7;
+  repeated KeeptruckinDvirRecord dvirs = 8;
+  repeated KeeptruckinDiagnosticRecord diagnostics = 9;
+  repeated openeld.providers.eld.shared.v1.EldSyncCheckpoint checkpoints = 10;
+}

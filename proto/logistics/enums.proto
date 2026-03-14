@@ -1,0 +1,197 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+// * Represents the driver's lifecycle state inside the carrier system.
+enum DriverStatus {
+  DRIVER_STATUS_UNSPECIFIED = 0;
+  DRIVER_STATUS_ACTIVE = 1;
+  DRIVER_STATUS_INACTIVE = 2;
+  DRIVER_STATUS_DEACTIVATED = 3;
+}
+
+// * Represents the normalized duty status state.
+enum DutyStatus {
+  DUTY_STATUS_UNSPECIFIED = 0;
+  DUTY_STATUS_OFF_DUTY = 1;
+  DUTY_STATUS_SLEEPER_BERTH = 2;
+  DUTY_STATUS_DRIVING = 3;
+  DUTY_STATUS_ON_DUTY_NOT_DRIVING = 4;
+  DUTY_STATUS_PERSONAL_CONVEYANCE = 5;
+  DUTY_STATUS_YARD_MOVE = 6;
+  DUTY_STATUS_WAIT_TIME = 7;
+}
+
+// * Represents the high-level FMCSA ELD event family.
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  EVENT_TYPE_DUTY_STATUS_CHANGE = 1;
+  EVENT_TYPE_INTERMEDIATE_LOG = 2;
+  EVENT_TYPE_SPECIAL_DRIVING_CONDITION = 3;
+  EVENT_TYPE_CERTIFICATION = 4;
+  EVENT_TYPE_LOGIN_LOGOUT = 5;
+  EVENT_TYPE_ENGINE_POWER = 6;
+  EVENT_TYPE_MALFUNCTION_OR_DIAGNOSTIC = 7;
+}
+
+// * Represents a normalized sub-code for the event family.
+enum HosEventCode {
+  HOS_EVENT_CODE_UNSPECIFIED = 0;
+  HOS_EVENT_CODE_OFF_DUTY = 1;
+  HOS_EVENT_CODE_SLEEPER_BERTH = 2;
+  HOS_EVENT_CODE_DRIVING = 3;
+  HOS_EVENT_CODE_ON_DUTY_NOT_DRIVING = 4;
+  HOS_EVENT_CODE_PERSONAL_CONVEYANCE = 5;
+  HOS_EVENT_CODE_YARD_MOVE = 6;
+  HOS_EVENT_CODE_WAIT_TIME = 7;
+  HOS_EVENT_CODE_INTERMEDIATE_LOG = 8;
+  HOS_EVENT_CODE_LOGIN = 9;
+  HOS_EVENT_CODE_LOGOUT = 10;
+  HOS_EVENT_CODE_ENGINE_POWER_UP = 11;
+  HOS_EVENT_CODE_ENGINE_SHUTDOWN = 12;
+  HOS_EVENT_CODE_CERTIFICATION = 13;
+  HOS_EVENT_CODE_MALFUNCTION = 14;
+  HOS_EVENT_CODE_DIAGNOSTIC = 15;
+}
+
+// * Represents how a record entered the system.
+enum EventOrigin {
+  EVENT_ORIGIN_UNSPECIFIED = 0;
+  EVENT_ORIGIN_AUTO = 1;
+  EVENT_ORIGIN_DRIVER = 2;
+  EVENT_ORIGIN_OTHER_USER = 3;
+  EVENT_ORIGIN_UNIDENTIFIED = 4;
+}
+
+// * Represents the record lifecycle after edits and review.
+enum RecordStatus {
+  RECORD_STATUS_UNSPECIFIED = 0;
+  RECORD_STATUS_ACTIVE = 1;
+  RECORD_STATUS_INACTIVE_CHANGED = 2;
+  RECORD_STATUS_INACTIVE_CHANGE_REQUESTED = 3;
+  RECORD_STATUS_INACTIVE_CHANGE_REJECTED = 4;
+}
+
+// * Represents the HOS cycle/ruleset applied to the driver.
+enum HosRuleset {
+  HOS_RULESET_UNSPECIFIED = 0;
+  HOS_RULESET_US_70_8 = 1;
+  HOS_RULESET_US_60_7 = 2;
+  HOS_RULESET_US_PASSENGER = 3;
+  HOS_RULESET_US_SHORT_HAUL = 4;
+  HOS_RULESET_CA_SOUTH_70 = 5;
+  HOS_RULESET_CA_SOUTH_120 = 6;
+  HOS_RULESET_CA_NORTH_80 = 7;
+  HOS_RULESET_CA_NORTH_120 = 8;
+}
+
+// * Represents a standardized malfunction or diagnostic code.
+enum MalfunctionCode {
+  MALFUNCTION_CODE_UNSPECIFIED = 0;
+  MALFUNCTION_CODE_POWER = 1;
+  MALFUNCTION_CODE_ENGINE_SYNCHRONIZATION = 2;
+  MALFUNCTION_CODE_TIMING = 3;
+  MALFUNCTION_CODE_POSITIONING = 4;
+  MALFUNCTION_CODE_DATA_RECORDING = 5;
+  MALFUNCTION_CODE_DATA_TRANSFER = 6;
+  MALFUNCTION_CODE_OTHER = 7;
+}
+
+// * Represents the inspection lifecycle stage for a DVIR.
+enum InspectionType {
+  INSPECTION_TYPE_UNSPECIFIED = 0;
+  INSPECTION_TYPE_PRE_TRIP = 1;
+  INSPECTION_TYPE_POST_TRIP = 2;
+  INSPECTION_TYPE_INTERIM = 3;
+}
+
+// * Represents the severity of a compliance or operational violation.
+enum ViolationSeverity {
+  VIOLATION_SEVERITY_UNSPECIFIED = 0;
+  VIOLATION_SEVERITY_INFO = 1;
+  VIOLATION_SEVERITY_WARNING = 2;
+  VIOLATION_SEVERITY_CRITICAL = 3;
+}
+
+// * Represents the lifecycle state of a carrier-granted data consent.
+enum ConsentStatus {
+  CONSENT_STATUS_UNSPECIFIED = 0;
+  CONSENT_STATUS_ACTIVE = 1;
+  CONSENT_STATUS_REVOKED = 2;
+  CONSENT_STATUS_EXPIRED = 3;
+}
+
+// * Represents how a carrier granted access to a platform.
+enum ConsentMethod {
+  CONSENT_METHOD_UNSPECIFIED = 0;
+  CONSENT_METHOD_ELD_OAUTH = 1;
+  CONSENT_METHOD_PORTAL = 2;
+  CONSENT_METHOD_API_KEY = 3;
+  CONSENT_METHOD_WRITTEN_AGREEMENT = 4;
+}
+
+// * Represents the categories of data a platform may access.
+enum DataAccessScope {
+  DATA_ACCESS_SCOPE_UNSPECIFIED = 0;
+  DATA_ACCESS_SCOPE_GPS = 1;
+  DATA_ACCESS_SCOPE_HOS = 2;
+  DATA_ACCESS_SCOPE_DRIVER = 3;
+  DATA_ACCESS_SCOPE_VEHICLE = 4;
+  DATA_ACCESS_SCOPE_SAFETY = 5;
+  DATA_ACCESS_SCOPE_IFTA = 6;
+  DATA_ACCESS_SCOPE_ASSET = 7;
+}
+
+// * Represents the normalized type of telematics safety event.
+enum SafetyEventType {
+  SAFETY_EVENT_TYPE_UNSPECIFIED = 0;
+  SAFETY_EVENT_TYPE_HARD_BRAKE = 1;
+  SAFETY_EVENT_TYPE_HARD_ACCEL = 2;
+  SAFETY_EVENT_TYPE_SPEEDING = 3;
+  SAFETY_EVENT_TYPE_HARD_TURN = 4;
+  SAFETY_EVENT_TYPE_COLLISION = 5;
+  SAFETY_EVENT_TYPE_ROLLOVER = 6;
+  SAFETY_EVENT_TYPE_LANE_DEPARTURE = 7;
+  SAFETY_EVENT_TYPE_FOLLOWING_DISTANCE = 8;
+}
+
+// * Represents the normalized severity of a safety event.
+enum SafetySeverity {
+  SAFETY_SEVERITY_UNSPECIFIED = 0;
+  SAFETY_SEVERITY_LOW = 1;
+  SAFETY_SEVERITY_MEDIUM = 2;
+  SAFETY_SEVERITY_HIGH = 3;
+  SAFETY_SEVERITY_CRITICAL = 4;
+}
+
+// * Represents the type of non-powered or auxiliary asset being tracked.
+enum AssetType {
+  ASSET_TYPE_UNSPECIFIED = 0;
+  ASSET_TYPE_TRAILER = 1;
+  ASSET_TYPE_CONTAINER = 2;
+  ASSET_TYPE_CHASSIS = 3;
+  ASSET_TYPE_DOLLY = 4;
+  ASSET_TYPE_REEFER = 5;
+  ASSET_TYPE_OTHER = 6;
+}
+
+// * Represents the operational status of an asset.
+enum AssetStatus {
+  ASSET_STATUS_UNSPECIFIED = 0;
+  ASSET_STATUS_ACTIVE = 1;
+  ASSET_STATUS_INACTIVE = 2;
+  ASSET_STATUS_IN_MAINTENANCE = 3;
+  ASSET_STATUS_RETIRED = 4;
+}
+
+// * Represents the normalized fuel type used for IFTA reporting.
+enum FuelType {
+  FUEL_TYPE_UNSPECIFIED = 0;
+  FUEL_TYPE_DIESEL = 1;
+  FUEL_TYPE_GASOLINE = 2;
+  FUEL_TYPE_CNG = 3;
+  FUEL_TYPE_LNG = 4;
+  FUEL_TYPE_ELECTRIC = 5;
+  FUEL_TYPE_HYBRID = 6;
+  FUEL_TYPE_OTHER = 7;
+}

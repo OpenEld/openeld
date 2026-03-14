@@ -1,0 +1,238 @@
+syntax = "proto3";
+
+package openeld.services.query.v1;
+
+import "common/metadata/source.proto";
+import "logistics/asset.proto";
+import "logistics/asset_location.proto";
+import "logistics/carrier.proto";
+import "logistics/data_consent.proto";
+import "logistics/driver.proto";
+import "logistics/dvir.proto";
+import "logistics/gps_location.proto";
+import "logistics/hos_daily_summary.proto";
+import "logistics/hos_event.proto";
+import "logistics/ifta_trip.proto";
+import "logistics/safety_event.proto";
+import "logistics/vehicle.proto";
+import "logistics/vehicle_assignment.proto";
+import "google/protobuf/timestamp.proto";
+
+message CursorPageRequest {
+  optional uint32 page_size = 1;
+  optional string cursor = 2;
+}
+
+message CursorPageResponse {
+  optional string next_cursor = 1;
+  bool has_more = 2;
+}
+
+message EntityScope {
+  optional string tenant_id = 1;
+  optional string carrier_id = 2;
+  optional openeld.common.metadata.v1.SourceProvider provider = 3;
+  optional string provider_account_id = 4;
+}
+
+message TimeRangeFilter {
+  optional google.protobuf.Timestamp start_time = 1;
+  optional google.protobuf.Timestamp end_time = 2;
+}
+
+message LatestViewOptions {
+  bool latest_only = 1;
+}
+
+message GetCarrierRequest {
+  string carrier_id = 1;
+  optional EntityScope scope = 2;
+}
+
+message GetCarrierResponse {
+  optional openeld.logistics.v1.Carrier carrier = 1;
+}
+
+message GetDataConsentRequest {
+  string consent_id = 1;
+  optional EntityScope scope = 2;
+}
+
+message GetDataConsentResponse {
+  optional openeld.logistics.v1.DataConsent data_consent = 1;
+}
+
+message ListDataConsentsRequest {
+  optional EntityScope scope = 1;
+  optional string platform_id = 2;
+  optional CursorPageRequest page = 3;
+}
+
+message ListDataConsentsResponse {
+  repeated openeld.logistics.v1.DataConsent data_consents = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListDriversRequest {
+  optional EntityScope scope = 1;
+  optional CursorPageRequest page = 2;
+}
+
+message ListDriversResponse {
+  repeated openeld.logistics.v1.Driver drivers = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListVehiclesRequest {
+  optional EntityScope scope = 1;
+  optional CursorPageRequest page = 2;
+}
+
+message ListVehiclesResponse {
+  repeated openeld.logistics.v1.Vehicle vehicles = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListVehicleAssignmentsRequest {
+  optional string driver_id = 1;
+  optional string vehicle_id = 2;
+  optional EntityScope scope = 3;
+  optional TimeRangeFilter time_range = 4;
+  optional CursorPageRequest page = 5;
+}
+
+message ListVehicleAssignmentsResponse {
+  repeated openeld.logistics.v1.VehicleAssignment vehicle_assignments = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListHosEventsRequest {
+  optional string driver_id = 1;
+  optional string vehicle_id = 2;
+  optional EntityScope scope = 3;
+  optional TimeRangeFilter time_range = 4;
+  optional LatestViewOptions view = 5;
+  optional CursorPageRequest page = 6;
+}
+
+message ListHosEventsResponse {
+  repeated openeld.logistics.v1.HosEvent hos_events = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListHosDailySummariesRequest {
+  optional string driver_id = 1;
+  optional EntityScope scope = 2;
+  optional TimeRangeFilter time_range = 3;
+  optional CursorPageRequest page = 4;
+}
+
+message ListHosDailySummariesResponse {
+  repeated openeld.logistics.v1.HosDailySummary hos_daily_summaries = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListGpsLocationsRequest {
+  optional string vehicle_id = 1;
+  optional string driver_id = 2;
+  optional EntityScope scope = 3;
+  optional TimeRangeFilter time_range = 4;
+  optional LatestViewOptions view = 5;
+  optional CursorPageRequest page = 6;
+}
+
+message ListGpsLocationsResponse {
+  repeated openeld.logistics.v1.GpsLocation gps_locations = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListSafetyEventsRequest {
+  optional string vehicle_id = 1;
+  optional string driver_id = 2;
+  optional EntityScope scope = 3;
+  optional TimeRangeFilter time_range = 4;
+  optional CursorPageRequest page = 5;
+}
+
+message ListSafetyEventsResponse {
+  repeated openeld.logistics.v1.SafetyEvent safety_events = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListIftaTripsRequest {
+  optional string vehicle_id = 1;
+  optional string driver_id = 2;
+  optional string jurisdiction = 3;
+  optional EntityScope scope = 4;
+  optional TimeRangeFilter time_range = 5;
+  optional CursorPageRequest page = 6;
+}
+
+message ListIftaTripsResponse {
+  repeated openeld.logistics.v1.IftaTrip ifta_trips = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message GetAssetRequest {
+  string asset_id = 1;
+  optional EntityScope scope = 2;
+}
+
+message GetAssetResponse {
+  optional openeld.logistics.v1.Asset asset = 1;
+}
+
+message ListAssetsRequest {
+  optional EntityScope scope = 1;
+  optional CursorPageRequest page = 2;
+}
+
+message ListAssetsResponse {
+  repeated openeld.logistics.v1.Asset assets = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListAssetLocationsRequest {
+  optional string asset_id = 1;
+  optional string linked_vehicle_id = 2;
+  optional EntityScope scope = 3;
+  optional TimeRangeFilter time_range = 4;
+  optional LatestViewOptions view = 5;
+  optional CursorPageRequest page = 6;
+}
+
+message ListAssetLocationsResponse {
+  repeated openeld.logistics.v1.AssetLocation asset_locations = 1;
+  optional CursorPageResponse page = 2;
+}
+
+message ListDvirsRequest {
+  optional string vehicle_id = 1;
+  optional string driver_id = 2;
+  optional EntityScope scope = 3;
+  optional TimeRangeFilter time_range = 4;
+  optional CursorPageRequest page = 5;
+}
+
+message ListDvirsResponse {
+  repeated openeld.logistics.v1.Dvir dvirs = 1;
+  optional CursorPageResponse page = 2;
+}
+
+service QueryService {
+  rpc GetCarrier(GetCarrierRequest) returns (GetCarrierResponse);
+  rpc GetDataConsent(GetDataConsentRequest) returns (GetDataConsentResponse);
+  rpc ListDataConsents(ListDataConsentsRequest) returns (ListDataConsentsResponse);
+  rpc ListDrivers(ListDriversRequest) returns (ListDriversResponse);
+  rpc ListVehicles(ListVehiclesRequest) returns (ListVehiclesResponse);
+  rpc ListVehicleAssignments(ListVehicleAssignmentsRequest) returns (ListVehicleAssignmentsResponse);
+  rpc ListHosEvents(ListHosEventsRequest) returns (ListHosEventsResponse);
+  rpc ListHosDailySummaries(ListHosDailySummariesRequest) returns (ListHosDailySummariesResponse);
+  rpc ListGpsLocations(ListGpsLocationsRequest) returns (ListGpsLocationsResponse);
+  rpc ListSafetyEvents(ListSafetyEventsRequest) returns (ListSafetyEventsResponse);
+  rpc ListIftaTrips(ListIftaTripsRequest) returns (ListIftaTripsResponse);
+  rpc GetAsset(GetAssetRequest) returns (GetAssetResponse);
+  rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+  rpc ListAssetLocations(ListAssetLocationsRequest) returns (ListAssetLocationsResponse);
+  rpc ListDvirs(ListDvirsRequest) returns (ListDvirsResponse);
+}

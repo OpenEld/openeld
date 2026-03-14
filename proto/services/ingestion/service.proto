@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package openeld.services.ingestion.v1;
+
+import "providers/eld/geotab/contracts.proto";
+import "providers/eld/keeptruckin/contracts.proto";
+import "providers/eld/motive/contracts.proto";
+import "providers/eld/samsara/contracts.proto";
+import "providers/telematics/fleet_complete/contracts.proto";
+import "providers/telematics/fourkites/contracts.proto";
+import "providers/telematics/project44/contracts.proto";
+import "providers/telematics/verizon_connect/contracts.proto";
+
+// * Accepts provider-native payloads for persistence and downstream normalization.
+message IngestProviderPayloadRequest {
+  optional string tenant_id = 1;
+  oneof provider_payload {
+    openeld.providers.eld.samsara.v1.SamsaraPayload samsara = 10;
+    openeld.providers.eld.motive.v1.MotivePayload motive = 11;
+    openeld.providers.eld.geotab.v1.GeotabPayload geotab = 12;
+    openeld.providers.eld.keeptruckin.v1.KeeptruckinPayload keeptruckin = 13;
+    openeld.providers.telematics.project44.v1.Project44Payload project44 = 14;
+    openeld.providers.telematics.fourkites.v1.FourKitesPayload four_kites = 15;
+    openeld.providers.telematics.verizon_connect.v1.VerizonConnectPayload verizon_connect = 16;
+    openeld.providers.telematics.fleet_complete.v1.FleetCompletePayload fleet_complete = 17;
+  }
+}
+
+// * Returns ingestion acceptance counts and non-fatal warnings.
+message IngestProviderPayloadResponse {
+  uint32 accepted_record_count = 1;
+  repeated string warnings = 2;
+}
+
+service IngestionService {
+  rpc IngestProviderPayload(IngestProviderPayloadRequest) returns (IngestProviderPayloadResponse);
+}

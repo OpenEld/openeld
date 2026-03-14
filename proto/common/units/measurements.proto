@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package openeld.common.units.v1;
+
+// * Stores a normalized distance measurement in meters.
+message Distance {
+  double meters = 1;
+}
+
+// * Stores a normalized speed measurement in kilometers per hour.
+message Speed {
+  double kilometers_per_hour = 1;
+}
+
+// * Stores a normalized compass heading in degrees.
+message Heading {
+  double degrees = 1;
+}
+
+// * Stores a normalized odometer reading in meters.
+message OdometerReading {
+  double meters = 1;
+}
+
+// * Stores a normalized engine-hour reading in seconds.
+message EngineHours {
+  double seconds = 1;
+}

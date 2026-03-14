@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+import "common/metadata/audit.proto";
+import "common/metadata/source.proto";
+import "google/protobuf/timestamp.proto";
+import "logistics/enums.proto";
+
+// * Represents an individual operating under a carrier.
+message Driver {
+  string driver_id = 1;
+  string carrier_id = 2;
+  string first_name = 3;
+  string last_name = 4;
+  optional string license_number = 5;
+  optional string license_state = 6;
+  bool eld_exempt = 7;
+  HosRuleset hos_ruleset = 8;
+  DriverStatus status = 9;
+  optional string email = 10;
+  optional string phone = 11;
+  optional string username = 12;
+  optional google.protobuf.Timestamp created_at = 13;
+  optional google.protobuf.Timestamp updated_at = 14;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.common.metadata.v1.AuditMetadata audit = 21;
+}

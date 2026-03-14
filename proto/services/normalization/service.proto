@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package openeld.services.normalization.v1;
+
+import "logistics/asset.proto";
+import "logistics/asset_location.proto";
+import "logistics/carrier.proto";
+import "logistics/data_consent.proto";
+import "logistics/driver.proto";
+import "logistics/dvir.proto";
+import "logistics/gps_location.proto";
+import "logistics/hos_daily_summary.proto";
+import "logistics/hos_event.proto";
+import "logistics/ifta_trip.proto";
+import "logistics/safety_event.proto";
+import "logistics/vehicle.proto";
+import "logistics/vehicle_assignment.proto";
+import "providers/eld/geotab/contracts.proto";
+import "providers/eld/keeptruckin/contracts.proto";
+import "providers/eld/motive/contracts.proto";
+import "providers/eld/samsara/contracts.proto";
+import "providers/telematics/fleet_complete/contracts.proto";
+import "providers/telematics/fourkites/contracts.proto";
+import "providers/telematics/project44/contracts.proto";
+import "providers/telematics/verizon_connect/contracts.proto";
+
+// * Accepts provider-native payloads for normalization into canonical messages.
+message NormalizeProviderPayloadRequest {
+  optional string tenant_id = 1;
+  oneof provider_payload {
+    openeld.providers.eld.samsara.v1.SamsaraPayload samsara = 10;
+    openeld.providers.eld.motive.v1.MotivePayload motive = 11;
+    openeld.providers.eld.geotab.v1.GeotabPayload geotab = 12;
+    openeld.providers.eld.keeptruckin.v1.KeeptruckinPayload keeptruckin = 13;
+    openeld.providers.telematics.project44.v1.Project44Payload project44 = 14;
+    openeld.providers.telematics.fourkites.v1.FourKitesPayload four_kites = 15;
+    openeld.providers.telematics.verizon_connect.v1.VerizonConnectPayload verizon_connect = 16;
+    openeld.providers.telematics.fleet_complete.v1.FleetCompletePayload fleet_complete = 17;
+  }
+}
+
+// * Returns the normalized logistics entities derived from a provider payload.
+message NormalizeProviderPayloadResponse {
+  repeated openeld.logistics.v1.Carrier carriers = 1;
+  repeated openeld.logistics.v1.Driver drivers = 2;
+  repeated openeld.logistics.v1.Vehicle vehicles = 3;
+  repeated openeld.logistics.v1.VehicleAssignment vehicle_assignments = 4;
+  repeated openeld.logistics.v1.HosEvent hos_events = 5;
+  repeated openeld.logistics.v1.HosDailySummary hos_daily_summaries = 6;
+  repeated openeld.logistics.v1.GpsLocation gps_locations = 7;
+  repeated openeld.logistics.v1.Dvir dvirs = 8;
+  repeated openeld.logistics.v1.SafetyEvent safety_events = 9;
+  repeated openeld.logistics.v1.IftaTrip ifta_trips = 10;
+  repeated openeld.logistics.v1.Asset assets = 11;
+  repeated openeld.logistics.v1.AssetLocation asset_locations = 12;
+  repeated openeld.logistics.v1.DataConsent data_consents = 13;
+  repeated string warnings = 14;
+}
+
+service NormalizationService {
+  rpc NormalizeProviderPayload(NormalizeProviderPayloadRequest) returns (NormalizeProviderPayloadResponse);
+}

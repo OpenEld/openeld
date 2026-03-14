@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+package openeld.providers.eld.shared.v1;
+
+import "common/metadata/source.proto";
+import "common/primitives/location.proto";
+import "google/protobuf/timestamp.proto";
+
+// * Describes how a provider account authenticates and what environment it targets.
+message EldAuthProfile {
+  string auth_method = 1;
+  optional string environment = 2;
+  optional string base_url = 3;
+  repeated string scope_hints = 4;
+}
+
+// * Identifies the provider account or tenant boundary used for a sync.
+message EldProviderAccount {
+  string provider_account_id = 1;
+  optional string carrier_id = 2;
+  optional EldAuthProfile auth_profile = 3;
+}
+
+// * Represents a provider-specific driver record from an ELD source.
+message EldDriverRecord {
+  string provider_driver_id = 1;
+  optional string first_name = 2;
+  optional string last_name = 3;
+  optional string full_name = 4;
+  optional string license_number = 5;
+  optional string status = 6;
+  optional string email = 7;
+  optional string phone = 8;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Represents a provider-specific vehicle record from an ELD source.
+message EldVehicleRecord {
+  string provider_vehicle_id = 1;
+  optional string vin = 2;
+  optional string name = 3;
+  optional string license_plate = 4;
+  optional string make = 5;
+  optional string model = 6;
+  optional int32 year = 7;
+  optional double odometer_meters = 8;
+  optional double engine_hours_seconds = 9;
+  optional string eld_device_id = 10;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Represents a provider-specific driver/vehicle assignment from an ELD source.
+message EldVehicleAssignmentRecord {
+  string provider_assignment_id = 1;
+  optional string provider_driver_id = 2;
+  optional string provider_vehicle_id = 3;
+  optional string provider_codriver_id = 4;
+  optional google.protobuf.Timestamp start_time = 5;
+  optional google.protobuf.Timestamp end_time = 6;
+  repeated string trailer_identifiers = 7;
+  optional string shipping_doc_number = 8;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Represents a provider-specific HOS event record from an ELD source.
+message EldHosEventRecord {
+  string provider_event_id = 1;
+  optional string provider_driver_id = 2;
+  optional string provider_vehicle_id = 3;
+  optional google.protobuf.Timestamp event_timestamp = 4;
+  optional string duty_status = 5;
+  optional string event_type = 6;
+  optional openeld.common.primitives.v1.GeoPoint position = 7;
+  optional string annotation = 8;
+  optional string origin = 9;
+  optional string record_status = 10;
+  optional double odometer_meters = 11;
+  optional double engine_hours_seconds = 12;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Represents a provider-specific HOS clock summary from an ELD source.
+message EldHosClockRecord {
+  string provider_clock_id = 1;
+  optional string provider_driver_id = 2;
+  optional string clock_type = 3;
+  optional double remaining_seconds = 4;
+  optional google.protobuf.Timestamp resets_at = 5;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Represents a provider-specific GPS location record from an ELD source.
+message EldGpsLocationRecord {
+  string provider_location_id = 1;
+  optional string provider_vehicle_id = 2;
+  optional string provider_driver_id = 3;
+  optional google.protobuf.Timestamp timestamp = 4;
+  optional openeld.common.primitives.v1.GeoPoint position = 5;
+  optional double speed_kilometers_per_hour = 6;
+  optional double heading_degrees = 7;
+  optional double odometer_meters = 8;
+  optional double engine_hours_seconds = 9;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Represents a provider-specific malfunction or diagnostic record.
+message EldDiagnosticRecord {
+  string provider_diagnostic_id = 1;
+  optional string provider_driver_id = 2;
+  optional string provider_vehicle_id = 3;
+  optional google.protobuf.Timestamp event_timestamp = 4;
+  optional string diagnostic_type = 5;
+  optional string diagnostic_code = 6;
+  optional string description = 7;
+  optional bool is_active = 8;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Represents a provider-specific DVIR record from an ELD source.
+message EldDvirRecord {
+  string provider_dvir_id = 1;
+  optional string provider_driver_id = 2;
+  optional string provider_vehicle_id = 3;
+  optional google.protobuf.Timestamp inspection_time = 4;
+  optional string inspection_type = 5;
+  optional bool is_safe_to_drive = 6;
+  repeated string defect_descriptions = 7;
+  optional string mechanic_notes = 8;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+}
+
+// * Tracks incremental sync state for an ELD provider.
+message EldSyncCheckpoint {
+  optional string provider_account_id = 1;
+  optional string resource_name = 2;
+  optional string cursor = 3;
+  optional string page_token = 4;
+  optional string version_token = 5;
+  optional google.protobuf.Timestamp window_start = 6;
+  optional google.protobuf.Timestamp synced_through = 7;
+}
+
+// * Captures the operational characteristics of a provider sync flow.
+message EldSyncProfile {
+  string sync_model = 1;
+  bool supports_webhooks = 2;
+  bool supports_cursor = 3;
+  bool supports_page_polling = 4;
+  bool supports_version_token = 5;
+  bool requires_time_windowing = 6;
+  optional string rate_limit_notes = 7;
+}
+
+// * Declares which domains a provider payload currently carries.
+message EldSupportedDomains {
+  bool drivers = 1;
+  bool vehicles = 2;
+  bool assignments = 3;
+  bool hos_events = 4;
+  bool hos_clocks = 5;
+  bool gps_locations = 6;
+  bool dvirs = 7;
+  bool diagnostics = 8;
+}
+
+// * Provides payload-level metadata for a provider sync batch.
+message EldPayloadMetadata {
+  optional EldProviderAccount account = 1;
+  optional EldSyncProfile sync_profile = 2;
+  optional EldSupportedDomains supported_domains = 3;
+  optional string cursor = 4;
+  optional string provider_api_version = 5;
+  optional google.protobuf.Timestamp pulled_at = 6;
+}

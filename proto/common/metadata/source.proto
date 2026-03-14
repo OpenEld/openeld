@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package openeld.common.metadata.v1;
+
+import "common/primitives/ids.proto";
+
+// * Identifies the upstream provider that originated a record.
+enum SourceProvider {
+  SOURCE_PROVIDER_UNSPECIFIED = 0;
+  SOURCE_PROVIDER_SAMSARA = 1;
+  SOURCE_PROVIDER_MOTIVE = 2;
+  SOURCE_PROVIDER_GEOTAB = 3;
+  SOURCE_PROVIDER_KEEPTRUCKIN = 4;
+  SOURCE_PROVIDER_PROJECT44 = 5;
+  SOURCE_PROVIDER_FOUR_KITES = 6;
+  SOURCE_PROVIDER_VERIZON_CONNECT = 7;
+  SOURCE_PROVIDER_FLEET_COMPLETE = 8;
+  SOURCE_PROVIDER_CUSTOM = 9;
+}
+
+// * Captures traceability back to the upstream payload and identifiers.
+message SourceRecord {
+  SourceProvider provider = 1;
+  optional string provider_account_id = 2;
+  optional string provider_record_type = 3;
+  optional string primary_external_id = 4;
+  repeated openeld.common.primitives.v1.ExternalIdentifier external_ids = 5;
+  optional string native_status = 6;
+  optional string sync_cursor = 7;
+  optional string raw_payload_json = 8;
+}

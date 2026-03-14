@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package openeld.common.primitives.v1;
+
+// * Stores a geographic point using normalized decimal-degree coordinates.
+message GeoPoint {
+  double latitude = 1;
+  double longitude = 2;
+}
+
+// * Stores a human-readable location label for operational and compliance views.
+message LocationDescription {
+  optional string city = 1;
+  optional string subdivision_code = 2;
+  optional string country_code = 3;
+  optional string description = 4;
+}
+
+// * Combines coordinates with an optional human-readable description.
+message GeoLocation {
+  GeoPoint point = 1;
+  optional LocationDescription description = 2;
+}

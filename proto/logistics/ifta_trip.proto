@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+import "common/metadata/audit.proto";
+import "common/metadata/source.proto";
+import "common/units/measurements.proto";
+import "google/protobuf/timestamp.proto";
+import "logistics/enums.proto";
+
+// * Represents a normalized IFTA mileage record for a jurisdiction and time range.
+message IftaTrip {
+  string ifta_trip_id = 1;
+  string vehicle_id = 2;
+  optional string driver_id = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  string jurisdiction = 6;
+  openeld.common.units.v1.Distance distance = 7;
+  optional double fuel_consumed_liters = 8;
+  FuelType fuel_type = 9;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.common.metadata.v1.AuditMetadata audit = 21;
+}

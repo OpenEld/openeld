@@ -1,0 +1,31 @@
+{
+  "name": "openeld",
+  "version": "0.1.0",
+  "description": "Universal protobuf-first data interface for logistics ELD and telematics integrations.",
+  "type": "module",
+  "module": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "proto",
+    "src",
+    "buf",
+    "docs",
+    "examples"
+  ],
+  "scripts": {
+    "proto:lint": "buf lint",
+    "proto:breaking": "buf breaking --against '.git#branch=main'",
+    "gen": "buf generate --template buf/buf.gen.yaml",
+    "test": "bun test",
+    "test:contract": "bun test tests/contract",
+    "test:integration": "bun test tests/integration"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

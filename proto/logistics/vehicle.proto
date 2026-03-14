@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+import "common/metadata/audit.proto";
+import "common/metadata/source.proto";
+import "common/units/measurements.proto";
+
+// * Represents a commercial motor vehicle in the normalized model.
+message Vehicle {
+  string vehicle_id = 1;
+  string carrier_id = 2;
+  string vin = 3;
+  string name = 4;
+  optional string license_plate = 5;
+  optional string license_state = 6;
+  optional string make = 7;
+  optional string model = 8;
+  optional int32 year = 9;
+  optional openeld.common.units.v1.OdometerReading odometer = 10;
+  optional openeld.common.units.v1.EngineHours engine_hours = 11;
+  optional string eld_device_id = 12;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.common.metadata.v1.AuditMetadata audit = 21;
+}

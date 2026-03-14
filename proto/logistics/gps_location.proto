@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+import "common/metadata/audit.proto";
+import "common/metadata/source.proto";
+import "common/primitives/location.proto";
+import "common/units/measurements.proto";
+import "google/protobuf/timestamp.proto";
+
+// * Represents a normalized GPS breadcrumb.
+message GpsLocation {
+  string location_id = 1;
+  string vehicle_id = 2;
+  optional string driver_id = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  openeld.common.primitives.v1.GeoPoint position = 5;
+  optional openeld.common.units.v1.Speed speed = 6;
+  optional openeld.common.units.v1.Heading heading = 7;
+  optional openeld.common.units.v1.OdometerReading odometer = 8;
+  optional openeld.common.units.v1.EngineHours engine_hours = 9;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.common.metadata.v1.AuditMetadata audit = 21;
+}

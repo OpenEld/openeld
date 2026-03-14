@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+import "common/metadata/audit.proto";
+import "common/metadata/source.proto";
+import "common/primitives/location.proto";
+import "google/protobuf/timestamp.proto";
+
+// * Represents a time-stamped asset location and optional linkage to a powered vehicle.
+message AssetLocation {
+  string asset_location_id = 1;
+  string asset_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  openeld.common.primitives.v1.GeoPoint position = 4;
+  optional string linked_vehicle_id = 5;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.common.metadata.v1.AuditMetadata audit = 21;
+}

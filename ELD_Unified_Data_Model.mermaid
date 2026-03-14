@@ -1,0 +1,123 @@
+erDiagram
+    CARRIER ||--o{ DRIVER : "employs"
+    CARRIER ||--o{ VEHICLE : "owns"
+    DRIVER ||--o{ VEHICLE_ASSIGNMENT : "assigned to"
+    VEHICLE ||--o{ VEHICLE_ASSIGNMENT : "assigned to"
+    DRIVER ||--o{ HOS_EVENT : "logs"
+    VEHICLE ||--o{ HOS_EVENT : "associated with"
+    DRIVER ||--o{ HOS_DAILY_SUMMARY : "summarized by"
+    DRIVER ||--o{ DVIR : "inspects"
+    VEHICLE ||--o{ DVIR : "inspected"
+    VEHICLE ||--o{ GPS_LOCATION : "tracked at"
+
+    CARRIER {
+        UUID carrier_id PK
+        string usdot_number
+        string mc_number
+        string name
+        string main_office_address
+        string home_terminal_timezone
+    }
+
+    DRIVER {
+        UUID driver_id PK
+        UUID carrier_id FK
+        string first_name
+        string last_name
+        string license_number
+        string license_state
+        boolean eld_exempt
+        enum hos_ruleset
+        enum status
+        string email
+        string phone
+        string username
+        datetime created_at
+        datetime updated_at
+    }
+
+    VEHICLE {
+        UUID vehicle_id PK
+        UUID carrier_id FK
+        string vin
+        string name
+        string license_plate
+        string license_state
+        string make
+        string model
+        int year
+        double odometer_meters
+        double engine_hours_seconds
+        string eld_device_id
+    }
+
+    VEHICLE_ASSIGNMENT {
+        UUID assignment_id PK
+        UUID driver_id FK
+        UUID vehicle_id FK
+        UUID codriver_id FK
+        datetime start_time
+        datetime end_time
+        string trailer_names
+        string shipping_doc_number
+    }
+
+    HOS_EVENT {
+        UUID event_id PK
+        UUID driver_id FK
+        UUID vehicle_id FK
+        datetime event_timestamp
+        datetime event_end_time
+        enum event_type
+        enum event_code
+        enum duty_status
+        double latitude
+        double longitude
+        string location_description
+        double odometer_meters
+        double engine_hours_seconds
+        enum origin
+        enum record_status
+        string annotation
+        boolean certified
+        UUID edited_by_driver_id FK
+        int sequence_number
+    }
+
+    HOS_DAILY_SUMMARY {
+        UUID summary_id PK
+        UUID driver_id FK
+        date log_date
+        long off_duty_ms
+        long sleeper_berth_ms
+        long driving_ms
+        long on_duty_ms
+        double distance_meters
+        boolean is_certified
+        json violations
+    }
+
+    GPS_LOCATION {
+        UUID location_id PK
+        UUID vehicle_id FK
+        UUID driver_id FK
+        datetime timestamp
+        double latitude
+        double longitude
+        double speed_kmh
+        double heading_degrees
+        double odometer_meters
+        double engine_hours_seconds
+    }
+
+    DVIR {
+        UUID dvir_id PK
+        UUID driver_id FK
+        UUID vehicle_id FK
+        enum inspection_type
+        datetime inspection_time
+        boolean is_safe_to_drive
+        json defects
+        string signature_driver
+        string mechanic_notes
+    }

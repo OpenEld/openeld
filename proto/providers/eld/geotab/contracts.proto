@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package openeld.providers.eld.geotab.v1;
+
+import "google/protobuf/timestamp.proto";
+import "providers/eld/shared/common.proto";
+
+// * Represents a Geotab user/driver record close to the native API shape.
+message GeotabUserRecord {
+  string id = 1;
+  optional string first_name = 2;
+  optional string last_name = 3;
+  optional string active_to = 4;
+  optional string employee_no = 5;
+  optional openeld.providers.eld.shared.v1.EldDriverRecord normalized_projection = 20;
+}
+
+// * Represents a Geotab device/vehicle record close to the native API shape.
+message GeotabDeviceRecord {
+  string id = 1;
+  optional string name = 2;
+  optional string vehicle_identification_number = 3;
+  optional double odometer_meters = 4;
+  optional double engine_hours_seconds = 5;
+  optional openeld.providers.eld.shared.v1.EldVehicleRecord normalized_projection = 20;
+}
+
+// * Represents a Geotab DutyStatusLog record.
+message GeotabDutyStatusLogRecord {
+  string id = 1;
+  optional string driver_id = 2;
+  optional string device_id = 3;
+  optional google.protobuf.Timestamp date_time = 4;
+  optional string status = 5;
+  optional string type = 6;
+  optional string origin = 7;
+  optional string record_status = 8;
+  optional double latitude = 9;
+  optional double longitude = 10;
+  optional double odometer_meters = 11;
+  optional double engine_hours_seconds = 12;
+  optional openeld.providers.eld.shared.v1.EldHosEventRecord normalized_projection = 20;
+}
+
+// * Represents a Geotab HOS or regulation clock record.
+message GeotabDriverRegulationRecord {
+  string driver_id = 1;
+  optional string regulation = 2;
+  optional double driving_remaining_seconds = 3;
+  optional double cycle_remaining_seconds = 4;
+  optional double break_remaining_seconds = 5;
+  optional openeld.providers.eld.shared.v1.EldHosClockRecord normalized_projection = 20;
+}
+
+// * Represents a Geotab log record used for GPS or breadcrumb data.
+message GeotabLogRecord {
+  string id = 1;
+  optional string device_id = 2;
+  optional string driver_id = 3;
+  optional google.protobuf.Timestamp date_time = 4;
+  optional double latitude = 5;
+  optional double longitude = 6;
+  optional double speed_kilometers_per_hour = 7;
+  optional double heading_degrees = 8;
+  optional openeld.providers.eld.shared.v1.EldGpsLocationRecord normalized_projection = 20;
+}
+
+// * Represents a Geotab DVIR-like inspection record.
+message GeotabInspectionRecord {
+  string id = 1;
+  optional string driver_id = 2;
+  optional string device_id = 3;
+  optional google.protobuf.Timestamp inspection_time = 4;
+  optional string inspection_type = 5;
+  optional bool safe = 6;
+  repeated string defect_descriptions = 7;
+  optional openeld.providers.eld.shared.v1.EldDvirRecord normalized_projection = 20;
+}
+
+// * Represents a Geotab diagnostic or malfunction record.
+message GeotabDiagnosticRecord {
+  string id = 1;
+  optional string driver_id = 2;
+  optional string device_id = 3;
+  optional google.protobuf.Timestamp detected_at = 4;
+  optional string type = 5;
+  optional string code = 6;
+  optional string description = 7;
+  optional bool active = 8;
+  optional openeld.providers.eld.shared.v1.EldDiagnosticRecord normalized_projection = 20;
+}
+
+// * Groups the stable subset of Geotab records used by the normalization layer.
+message GeotabPayload {
+  optional openeld.providers.eld.shared.v1.EldPayloadMetadata metadata = 1;
+  repeated GeotabUserRecord users = 2;
+  repeated GeotabDeviceRecord devices = 3;
+  repeated openeld.providers.eld.shared.v1.EldVehicleAssignmentRecord vehicle_assignments = 4;
+  repeated GeotabDutyStatusLogRecord duty_status_logs = 5;
+  repeated GeotabDriverRegulationRecord driver_regulations = 6;
+  repeated GeotabLogRecord log_records = 7;
+  repeated GeotabInspectionRecord inspections = 8;
+  repeated GeotabDiagnosticRecord diagnostics = 9;
+  repeated openeld.providers.eld.shared.v1.EldSyncCheckpoint checkpoints = 10;
+}

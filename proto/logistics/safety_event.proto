@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+import "common/metadata/audit.proto";
+import "common/metadata/source.proto";
+import "common/primitives/location.proto";
+import "common/units/measurements.proto";
+import "google/protobuf/timestamp.proto";
+import "logistics/enums.proto";
+
+// * Represents a normalized telematics safety event.
+message SafetyEvent {
+  string safety_event_id = 1;
+  optional string driver_id = 2;
+  optional string vehicle_id = 3;
+  SafetyEventType event_type = 4;
+  google.protobuf.Timestamp event_time = 5;
+  optional openeld.common.primitives.v1.GeoPoint position = 6;
+  SafetySeverity severity = 7;
+  optional openeld.common.units.v1.Speed speed = 8;
+  optional openeld.common.units.v1.Speed speed_limit = 9;
+  optional double g_force = 10;
+  optional string provider_event_label = 11;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.common.metadata.v1.AuditMetadata audit = 21;
+}

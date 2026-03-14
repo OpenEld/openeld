@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package openeld.providers.eld.samsara.v1;
+
+import "common/primitives/location.proto";
+import "google/protobuf/timestamp.proto";
+import "providers/eld/shared/common.proto";
+
+// * Represents a Samsara driver record close to the native API shape.
+message SamsaraDriverRecord {
+  string id = 1;
+  optional string name = 2;
+  optional string license_number = 3;
+  optional string driver_activation_status = 4;
+  optional bool eld_exempt = 5;
+  optional string username = 6;
+  optional openeld.providers.eld.shared.v1.EldDriverRecord normalized_projection = 20;
+}
+
+// * Represents a Samsara vehicle record close to the native API shape.
+message SamsaraVehicleRecord {
+  string id = 1;
+  optional string name = 2;
+  optional string vin = 3;
+  optional string license_plate = 4;
+  optional double obd_odometer_meters = 5;
+  optional double engine_seconds = 6;
+  optional string eld_device_id = 7;
+  optional openeld.providers.eld.shared.v1.EldVehicleRecord normalized_projection = 20;
+}
+
+// * Represents a Samsara HOS log record with native field semantics preserved.
+message SamsaraHosLogRecord {
+  string id = 1;
+  optional string driver_id = 2;
+  optional string vehicle_id = 3;
+  optional google.protobuf.Timestamp start_time = 4;
+  optional google.protobuf.Timestamp end_time = 5;
+  optional string hos_status_type = 6;
+  optional string origin = 7;
+  optional openeld.common.primitives.v1.GeoLocation start_location = 8;
+  optional string remark = 9;
+  optional bool certified = 10;
+  optional uint32 sequence_number = 11;
+  optional double odometer_meters = 12;
+  optional double engine_hours_seconds = 13;
+  optional openeld.providers.eld.shared.v1.EldHosEventRecord normalized_projection = 20;
+}
+
+// * Represents a Samsara HOS clock record.
+message SamsaraHosClockRecord {
+  string driver_id = 1;
+  optional double cycle_remaining_seconds = 2;
+  optional double shift_remaining_seconds = 3;
+  optional double drive_remaining_seconds = 4;
+  optional double break_remaining_seconds = 5;
+  optional openeld.providers.eld.shared.v1.EldHosClockRecord normalized_projection = 20;
+}
+
+// * Represents a Samsara vehicle location record.
+message SamsaraVehicleLocationRecord {
+  string vehicle_id = 1;
+  optional string driver_id = 2;
+  optional google.protobuf.Timestamp time = 3;
+  optional double latitude = 4;
+  optional double longitude = 5;
+  optional double speed_miles_per_hour = 6;
+  optional double heading_degrees = 7;
+  optional openeld.providers.eld.shared.v1.EldGpsLocationRecord normalized_projection = 20;
+}
+
+// * Represents a Samsara DVIR record.
+message SamsaraDvirRecord {
+  string id = 1;
+  optional string driver_id = 2;
+  optional string vehicle_id = 3;
+  optional google.protobuf.Timestamp inspection_time = 4;
+  optional string inspection_type = 5;
+  optional bool is_safe_to_drive = 6;
+  repeated string defects = 7;
+  optional string mechanic_notes = 8;
+  optional openeld.providers.eld.shared.v1.EldDvirRecord normalized_projection = 20;
+}
+
+// * Represents a Samsara compliance diagnostic or malfunction record.
+message SamsaraDiagnosticRecord {
+  string id = 1;
+  optional string driver_id = 2;
+  optional string vehicle_id = 3;
+  optional google.protobuf.Timestamp detected_at = 4;
+  optional string type = 5;
+  optional string code = 6;
+  optional string description = 7;
+  optional bool is_active = 8;
+  optional openeld.providers.eld.shared.v1.EldDiagnosticRecord normalized_projection = 20;
+}
+
+// * Groups the stable subset of Samsara records used by the normalization layer.
+message SamsaraPayload {
+  optional openeld.providers.eld.shared.v1.EldPayloadMetadata metadata = 1;
+  repeated SamsaraDriverRecord drivers = 2;
+  repeated SamsaraVehicleRecord vehicles = 3;
+  repeated openeld.providers.eld.shared.v1.EldVehicleAssignmentRecord vehicle_assignments = 4;
+  repeated SamsaraHosLogRecord hos_logs = 5;
+  repeated SamsaraHosClockRecord hos_clocks = 6;
+  repeated SamsaraVehicleLocationRecord gps_locations = 7;
+  repeated SamsaraDvirRecord dvirs = 8;
+  repeated SamsaraDiagnosticRecord diagnostics = 9;
+  repeated openeld.providers.eld.shared.v1.EldSyncCheckpoint checkpoints = 10;
+}

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package openeld.common.metadata.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// * Stores audit timestamps and actor references for mutable records.
+message AuditMetadata {
+  optional google.protobuf.Timestamp created_at = 1;
+  optional google.protobuf.Timestamp updated_at = 2;
+  optional string created_by = 3;
+  optional string updated_by = 4;
+  uint32 revision = 5;
+}
+
+// * Describes a discrete change or certification action.
+message ChangeRecord {
+  optional string actor_id = 1;
+  optional string actor_role = 2;
+  optional google.protobuf.Timestamp changed_at = 3;
+  optional string reason = 4;
+}

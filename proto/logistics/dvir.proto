@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+import "common/metadata/audit.proto";
+import "common/metadata/source.proto";
+import "google/protobuf/timestamp.proto";
+import "logistics/enums.proto";
+
+// * Represents a DVIR defect or inspection issue.
+message DvirDefect {
+  string defect_id = 1;
+  optional string code = 2;
+  string title = 3;
+  optional string description = 4;
+  bool repaired = 5;
+  bool repaired_verified = 6;
+  optional string mechanic_notes = 7;
+}
+
+// * Represents a normalized driver vehicle inspection report.
+message Dvir {
+  string dvir_id = 1;
+  string driver_id = 2;
+  string vehicle_id = 3;
+  InspectionType inspection_type = 4;
+  google.protobuf.Timestamp inspection_time = 5;
+  bool is_safe_to_drive = 6;
+  repeated DvirDefect defects = 7;
+  optional string signature_driver = 8;
+  optional string mechanic_notes = 9;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.common.metadata.v1.AuditMetadata audit = 21;
+}

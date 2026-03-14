@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package openeld.services.sync.v1;
+
+import "common/metadata/source.proto";
+import "google/protobuf/timestamp.proto";
+
+// * Represents the resource family being synchronized.
+enum SyncResourceType {
+  SYNC_RESOURCE_TYPE_UNSPECIFIED = 0;
+  SYNC_RESOURCE_TYPE_DRIVERS = 1;
+  SYNC_RESOURCE_TYPE_VEHICLES = 2;
+  SYNC_RESOURCE_TYPE_ASSIGNMENTS = 3;
+  SYNC_RESOURCE_TYPE_HOS_EVENTS = 4;
+  SYNC_RESOURCE_TYPE_HOS_CLOCKS = 5;
+  SYNC_RESOURCE_TYPE_GPS_LOCATIONS = 6;
+  SYNC_RESOURCE_TYPE_DVIRS = 7;
+  SYNC_RESOURCE_TYPE_SAFETY_EVENTS = 8;
+  SYNC_RESOURCE_TYPE_IFTA_TRIPS = 9;
+  SYNC_RESOURCE_TYPE_ASSETS = 10;
+  SYNC_RESOURCE_TYPE_ASSET_LOCATIONS = 11;
+}
+
+// * Represents the checkpoint style used by a provider resource.
+enum CheckpointKind {
+  CHECKPOINT_KIND_UNSPECIFIED = 0;
+  CHECKPOINT_KIND_CURSOR = 1;
+  CHECKPOINT_KIND_PAGE_TOKEN = 2;
+  CHECKPOINT_KIND_VERSION_TOKEN = 3;
+  CHECKPOINT_KIND_TIME_WINDOW = 4;
+  CHECKPOINT_KIND_COMPOSITE = 5;
+}
+
+// * Defines the sync boundary for a provider account and resource.
+message SyncResourceScope {
+  string tenant_id = 1;
+  optional string carrier_id = 2;
+  optional string provider_account_id = 3;
+  SyncResourceType resource_type = 4;
+}
+
+// * Stores checkpoint values for a provider resource.
+message SyncCheckpoint {
+  CheckpointKind kind = 1;
+  optional string cursor = 2;
+  optional string page_token = 3;
+  optional string version_token = 4;
+  optional google.protobuf.Timestamp window_start = 5;
+  optional google.protobuf.Timestamp window_end = 6;
+  optional google.protobuf.Timestamp last_synced_at = 7;
+}
+
+// * Captures health and retry state for a provider sync process.
+message SyncHealth {
+  optional google.protobuf.Timestamp last_attempt_at = 1;
+  optional google.protobuf.Timestamp last_success_at = 2;
+  uint32 consecutive_failures = 3;
+  optional string last_error = 4;
+}
+
+// * Requests the stored sync checkpoint for a provider and resource boundary.
+message GetSyncCheckpointRequest {
+  openeld.common.metadata.v1.SourceProvider provider = 1;
+  SyncResourceScope scope = 2;
+}
+
+// * Returns the checkpoint used to resume provider polling.
+message GetSyncCheckpointResponse {
+  optional SyncCheckpoint checkpoint = 1;
+  optional SyncHealth health = 2;
+}
+
+// * Updates the stored sync checkpoint after a provider sync attempt.
+message UpdateSyncCheckpointRequest {
+  openeld.common.metadata.v1.SourceProvider provider = 1;
+  SyncResourceScope scope = 2;
+  SyncCheckpoint checkpoint = 3;
+  optional SyncHealth health = 4;
+}
+
+// * Acknowledges that a sync checkpoint update was accepted.
+message UpdateSyncCheckpointResponse {
+  bool acknowledged = 1;
+}
+
+service SyncService {
+  rpc GetSyncCheckpoint(GetSyncCheckpointRequest) returns (GetSyncCheckpointResponse);
+  rpc UpdateSyncCheckpoint(UpdateSyncCheckpointRequest) returns (UpdateSyncCheckpointResponse);
+}
