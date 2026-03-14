@@ -4,14 +4,10 @@
   "workspaces": {
     "": {
       "name": "openeld",
-      "dependencies": {
-        "tsup": "^8.5.1",
-      },
       "devDependencies": {
         "@types/bun": "latest",
-      },
-      "peerDependencies": {
-        "typescript": "^5",
+        "tsup": "^8.5.1",
+        "typescript": "^5.9.3",
       },
     },
   },

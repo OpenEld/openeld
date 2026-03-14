@@ -32,6 +32,22 @@ The default Buf generation template produces:
 - TypeScript output in `gen/ts`
 - Python output in `gen/py`
 
+## Packaging
+
+The npm package is built from `src/index.ts` into `dist/` before publishing.
+
+- `bun run build` emits the ESM bundle and `.d.ts` types
+- `npm pack --dry-run` validates the published package contents locally
+
+## Release Automation
+
+GitHub Actions handles validation and npm publishing:
+
+- `.github/workflows/ci.yml` runs install, build, tests, and `npm pack --dry-run`
+- `.github/workflows/publish.yml` publishes to npm on GitHub release publication or manual dispatch
+
+For npm publishing, configure npm trusted publishing for this repository and workflow, or update the workflow if you prefer token-based publishing.
+
 ## Next Steps
 
 - Refine provider-native record coverage as more provider field mappings are confirmed.

@@ -3,32 +3,47 @@
   "version": "0.1.0",
   "description": "Universal protobuf-first data interface for logistics ELD and telematics integrations.",
   "type": "module",
-  "module": "src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "files": [
+    "dist",
     "proto",
-    "src",
     "buf",
     "docs",
-    "examples"
+    "examples",
+    "README.md"
   ],
   "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "ci": "bun run build && bun test",
     "proto:lint": "buf lint",
     "proto:breaking": "buf breaking --against '.git#branch=main'",
     "gen": "buf generate --template buf/buf.gen.yaml",
     "test": "bun test",
     "test:contract": "bun test tests/contract",
-    "test:integration": "bun test tests/integration"
+    "test:integration": "bun test tests/integration",
+    "prepublishOnly": "bun run ci"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenEld/openeld.git"
+  },
+  "homepage": "https://github.com/OpenEld/openeld#readme",
+  "bugs": {
+    "url": "https://github.com/OpenEld/openeld/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "tsup": "^8.5.1"
+    "@types/bun": "latest",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   }
 }
