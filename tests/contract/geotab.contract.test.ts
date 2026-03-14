@@ -1,7 +1,17 @@
 import { describe, expect, test } from "bun:test";
+import { create } from "@bufbuild/protobuf";
 
-import { buildGeotabCanonicalSnapshot } from "../../src/fixture-normalization";
-import { expectOfficialDocsMetadata, readJson } from "./support";
+import { loadGeotabFixtureSet } from "../../src/fixtures/load-provider-fixture";
+import { normalizeProviderPayload } from "../../src/services/normalization-service";
+import {
+  NormalizeProviderPayloadRequestSchema,
+  NormalizeProviderPayloadResponseSchema,
+} from "../../gen/ts/services/normalization/service_pb";
+import {
+  expectOfficialDocsMetadata,
+  readJson,
+  serializeMessage,
+} from "./support";
 
 describe("Geotab canonical fixtures", () => {
   const usersMetadata = readJson<any>(
@@ -23,21 +33,6 @@ describe("Geotab canonical fixtures", () => {
     "tests/fixtures/providers/geotab/getfeed/metadata.json",
   );
 
-  const users = readJson<any>("tests/fixtures/providers/geotab/users/raw.json");
-  const devices = readJson<any>("tests/fixtures/providers/geotab/devices/raw.json");
-  const dutyStatusLogs = readJson<any>(
-    "tests/fixtures/providers/geotab/duty-status-logs/raw.json",
-  );
-  const driverRegulations = readJson<any>(
-    "tests/fixtures/providers/geotab/driver-regulations/raw.json",
-  );
-  const logRecords = readJson<any>(
-    "tests/fixtures/providers/geotab/log-records/raw.json",
-  );
-  const getfeed = readJson<any>(
-    "tests/fixtures/providers/geotab/getfeed/raw.json",
-  );
-
   test("fixture provenance checks", () => {
     [
       usersMetadata,
@@ -52,39 +47,44 @@ describe("Geotab canonical fixtures", () => {
   });
 
   test("provider contract checks", () => {
-    expect(typeof users.result[0].Id).toBe("string");
-    expect(typeof users.result[0].FirstName).toBe("string");
-    expect(typeof users.result[0].EmployeeNo).toBe("string");
+    const payload = loadGeotabFixtureSet();
 
-    expect(typeof devices.result[0].Id).toBe("string");
-    expect(typeof devices.result[0].Name).toBe("string");
-
-    expect(typeof dutyStatusLogs.result[0].Id).toBe("string");
-    expect(typeof dutyStatusLogs.result[0].Driver.Id).toBe("string");
-    expect(typeof dutyStatusLogs.result[0].Location.Latitude).toBe("number");
-    expect(typeof dutyStatusLogs.result[0].EngineHours).toBe("number");
-
-    expect(typeof driverRegulations.result[0].Availability.Driving).toBe("number");
-    expect(Array.isArray(driverRegulations.result[0].Violations)).toBe(true);
-
-    expect(typeof logRecords.result[0].Speed).toBe("number");
-    expect(typeof getfeed.feedResult.toVersion).toBe("string");
+    expect(payload.users[0]?.normalizedProjection?.providerDriverId).toBe("b1");
+    expect(payload.devices[0]?.normalizedProjection?.providerVehicleId).toBe("d1");
+    expect(payload.dutyStatusLogs[0]?.normalizedProjection?.providerEventId).toBe(
+      "dsl-1",
+    );
+    expect(payload.driverRegulations[0]?.normalizedProjection?.remainingSeconds).toBe(
+      39600,
+    );
+    expect(payload.logRecords[0]?.normalizedProjection?.providerLocationId).toBe(
+      "lr-1",
+    );
+    expect(payload.checkpoints[0]?.versionToken).toBe("4");
   });
 
   test("canonical golden checks", () => {
-    const normalized = buildGeotabCanonicalSnapshot({
-      users,
-      devices,
-      dutyStatusLogs,
-      driverRegulations,
-      logRecords,
-      getfeed,
+    const payload = loadGeotabFixtureSet();
+    const request = create(NormalizeProviderPayloadRequestSchema, {
+      providerPayload: {
+        case: "geotab",
+        value: payload,
+      },
     });
+    const normalized = normalizeProviderPayload(request);
     const golden = readJson<any>("tests/fixtures/normalized/geotab/canonical.json");
+    const serialized = serializeMessage(
+      NormalizeProviderPayloadResponseSchema,
+      normalized,
+    );
 
-    expect(normalized.sync.kind).toBe("version");
-    expect(normalized.sync.token).toBe("4");
-    expect(normalized.sync.hasMore).toBeNull();
-    expect(normalized).toEqual(golden);
+    expect(normalized.drivers[0]?.driverId).toBe("b1");
+    expect(normalized.vehicles[0]?.vehicleId).toBe("d1");
+    expect(normalized.hosEvents[0]?.eventId).toBe("dsl-1");
+    expect(normalized.gpsLocations[0]?.locationId).toBe("lr-1");
+    expect(normalized.warnings).toContain(
+      "Geotab feed advances version tokens from 3 to 4.",
+    );
+    expect(serialized).toEqual(golden);
   });
 });

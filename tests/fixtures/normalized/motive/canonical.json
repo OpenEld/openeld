@@ -1,93 +1,111 @@
 {
-  "provider": "motive",
-  "fixtureAuthority": "official-docs",
   "drivers": [
     {
-      "id": "104",
-      "firstName": "Jensen",
-      "lastName": "Effertz",
-      "status": "deactivated",
-      "username": null
-    },
-    {
-      "id": "11",
-      "firstName": "2",
-      "lastName": "Fo2",
-      "status": "active",
-      "username": null
-    },
-    {
-      "id": "156",
+      "driverId": "156",
+      "carrierId": "motive-docs-carrier",
       "firstName": "Harold",
       "lastName": "Hoeger",
-      "status": "deactivated",
-      "username": "hobart"
+      "status": "DRIVER_STATUS_DEACTIVATED",
+      "source": {
+        "provider": "SOURCE_PROVIDER_MOTIVE",
+        "providerAccountId": "motive-docs-account",
+        "providerRecordType": "driver",
+        "primaryExternalId": "156",
+        "nativeStatus": "deactivated"
+      }
     }
   ],
   "vehicles": [
     {
-      "id": "11",
-      "name": "12345",
-      "vin": null,
-      "licensePlate": null
-    },
-    {
-      "id": "23",
-      "name": "V-1000",
-      "vin": null,
-      "licensePlate": null
-    },
-    {
-      "id": "32",
-      "name": "V-1000",
-      "vin": "WP0AB2966NS458669",
-      "licensePlate": null
-    },
-    {
-      "id": "6620",
+      "vehicleId": "6620",
+      "carrierId": "motive-docs-carrier",
       "name": "6620",
-      "vin": null,
-      "licensePlate": null
+      "make": "Freightliner",
+      "model": "Conv",
+      "year": 2006,
+      "eldDeviceId": "AABL36FB400300",
+      "source": {
+        "provider": "SOURCE_PROVIDER_MOTIVE",
+        "providerAccountId": "motive-docs-account",
+        "providerRecordType": "vehicle",
+        "primaryExternalId": "6620",
+        "nativeStatus": "active"
+      }
     }
   ],
   "hosEvents": [
     {
-      "id": "221",
+      "eventId": "221",
       "driverId": "11",
       "vehicleId": "11",
-      "status": "driving",
-      "startTime": "2016-10-16T07:00:00Z",
-      "endTime": "2016-10-16T09:00:00Z",
-      "latitude": null,
-      "longitude": null,
-      "note": "Mobile, AL"
+      "eventTimestamp": "2016-10-16T07:00:00Z",
+      "eventType": "EVENT_TYPE_DUTY_STATUS_CHANGE",
+      "eventCode": "HOS_EVENT_CODE_DRIVING",
+      "dutyStatus": "DUTY_STATUS_DRIVING",
+      "origin": "EVENT_ORIGIN_AUTO",
+      "recordStatus": "RECORD_STATUS_ACTIVE",
+      "annotation": {
+        "text": "Mobile, AL"
+      },
+      "source": {
+        "provider": "SOURCE_PROVIDER_MOTIVE",
+        "providerAccountId": "motive-docs-account",
+        "providerRecordType": "hos_log",
+        "primaryExternalId": "221",
+        "nativeStatus": "driving"
+      }
     }
   ],
   "gpsLocations": [
     {
-      "id": "23",
+      "locationId": "af5b6e0d-c442-414c-88d2-d95e5cb7affe",
       "vehicleId": "23",
       "driverId": "104",
       "timestamp": "2016-03-17T12:12:07Z",
-      "latitude": 47.565647,
-      "longitude": -122.276261,
-      "speedKph": 104.77,
-      "headingDegrees": 90
+      "position": {
+        "latitude": 47.565647,
+        "longitude": -122.276261
+      },
+      "speed": {
+        "kilometersPerHour": 104.76803399999999
+      },
+      "heading": {
+        "degrees": 90
+      },
+      "odometer": {
+        "meters": 257935.681028
+      },
+      "engineHours": {
+        "seconds": 138600
+      },
+      "source": {
+        "provider": "SOURCE_PROVIDER_MOTIVE",
+        "providerAccountId": "motive-docs-account",
+        "providerRecordType": "vehicle_location",
+        "primaryExternalId": "af5b6e0d-c442-414c-88d2-d95e5cb7affe"
+      }
     }
   ],
   "dvirs": [
     {
-      "id": "9",
+      "dvirId": "9",
       "driverId": "11",
       "vehicleId": "4",
+      "inspectionType": "INSPECTION_TYPE_PRE_TRIP",
       "inspectionTime": "2016-07-22T14:00:00Z",
       "isSafeToDrive": true,
-      "defectCount": 0
+      "mechanicNotes": "Omaha, NE",
+      "source": {
+        "provider": "SOURCE_PROVIDER_MOTIVE",
+        "providerAccountId": "motive-docs-account",
+        "providerRecordType": "dvir",
+        "primaryExternalId": "9",
+        "nativeStatus": "corrected"
+      }
     }
   ],
-  "sync": {
-    "kind": "page",
-    "token": "1/25",
-    "hasMore": false
-  }
+  "warnings": [
+    "Motive sync checkpoint page-sync remains page-based at 1/25.",
+    "Motive HOS availability clocks are captured in the provider payload but are not projected into the normalization response."
+  ]
 }

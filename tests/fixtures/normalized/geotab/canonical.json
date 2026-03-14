@@ -1,52 +1,88 @@
 {
-  "provider": "geotab",
-  "fixtureAuthority": "official-docs",
   "drivers": [
     {
-      "id": "b1",
+      "driverId": "b1",
+      "carrierId": "geotab-docs-carrier",
       "firstName": "Alex",
       "lastName": "Driver",
-      "status": "active",
-      "username": "alex.driver@example.com"
+      "licenseNumber": "EMP-17",
+      "status": "DRIVER_STATUS_ACTIVE",
+      "email": "alex.driver@example.com",
+      "source": {
+        "provider": "SOURCE_PROVIDER_GEOTAB",
+        "providerAccountId": "geotab-docs-account",
+        "providerRecordType": "user",
+        "primaryExternalId": "b1",
+        "nativeStatus": "active"
+      }
     }
   ],
   "vehicles": [
     {
-      "id": "d1",
+      "vehicleId": "d1",
+      "carrierId": "geotab-docs-carrier",
       "name": "Truck 204",
-      "vin": "G9-000000123",
-      "licensePlate": null
+      "eldDeviceId": "G9-000000123",
+      "source": {
+        "provider": "SOURCE_PROVIDER_GEOTAB",
+        "providerAccountId": "geotab-docs-account",
+        "providerRecordType": "device",
+        "primaryExternalId": "d1"
+      }
     }
   ],
   "hosEvents": [
     {
-      "id": "dsl-1",
+      "eventId": "dsl-1",
       "driverId": "b1",
       "vehicleId": "d1",
-      "status": "Driving",
-      "startTime": "2024-08-01T12:00:00Z",
-      "endTime": null,
-      "latitude": 43.6532,
-      "longitude": -79.3832,
-      "note": "Automatic"
+      "eventTimestamp": "2024-08-01T12:00:00Z",
+      "eventType": "EVENT_TYPE_DUTY_STATUS_CHANGE",
+      "eventCode": "HOS_EVENT_CODE_DRIVING",
+      "dutyStatus": "DUTY_STATUS_DRIVING",
+      "position": {
+        "latitude": 43.6532,
+        "longitude": -79.3832
+      },
+      "odometer": {
+        "meters": 1200450
+      },
+      "engineHours": {
+        "seconds": 45000
+      },
+      "origin": "EVENT_ORIGIN_AUTO",
+      "recordStatus": "RECORD_STATUS_ACTIVE",
+      "source": {
+        "provider": "SOURCE_PROVIDER_GEOTAB",
+        "providerAccountId": "geotab-docs-account",
+        "providerRecordType": "duty_status_log",
+        "primaryExternalId": "dsl-1",
+        "nativeStatus": "Driving"
+      }
     }
   ],
   "gpsLocations": [
     {
-      "id": "lr-1",
+      "locationId": "lr-1",
       "vehicleId": "d1",
-      "driverId": null,
       "timestamp": "2024-08-01T12:05:00Z",
-      "latitude": 43.6532,
-      "longitude": -79.3832,
-      "speedKph": 88,
-      "headingDegrees": null
+      "position": {
+        "latitude": 43.6532,
+        "longitude": -79.3832
+      },
+      "speed": {
+        "kilometersPerHour": 88
+      },
+      "source": {
+        "provider": "SOURCE_PROVIDER_GEOTAB",
+        "providerAccountId": "geotab-docs-account",
+        "providerRecordType": "log_record",
+        "primaryExternalId": "lr-1"
+      }
     }
   ],
-  "dvirs": [],
-  "sync": {
-    "kind": "version",
-    "token": "4",
-    "hasMore": null
-  }
+  "warnings": [
+    "Geotab feed advances version tokens from 3 to 4.",
+    "Geotab driver regulation clocks are captured in the provider payload but are not projected into the normalization response."
+  ]
 }

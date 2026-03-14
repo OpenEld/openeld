@@ -1,4 +1,6 @@
 import { expect } from "bun:test";
+import { toJson, type Message } from "@bufbuild/protobuf";
+import type { GenMessage } from "@bufbuild/protobuf/codegenv2";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -17,4 +19,11 @@ export function expectOfficialDocsMetadata(metadata: {
   expect(metadata.sourceType).toBe("official-docs");
   expect(metadata.sourceUrl.startsWith("https://")).toBe(true);
   expect(metadata.provider.length > 0).toBe(true);
+}
+
+export function serializeMessage<T extends Message>(
+  schema: GenMessage<T>,
+  message: T,
+) {
+  return toJson(schema, message);
 }

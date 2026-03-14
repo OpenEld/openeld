@@ -1,3 +1,5 @@
 # Generated TypeScript
 
-This directory is reserved for generated TypeScript artifacts that may be surfaced through the package entrypoint later.
+This directory documents the generated protobuf bindings that are re-exported through the package entrypoint.
+
+Runtime code under `src/` imports generated schemas and generated message types directly instead of defining parallel handwritten domain types.

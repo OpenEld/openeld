@@ -1,61 +1,115 @@
 {
-  "provider": "samsara",
-  "fixtureAuthority": "official-docs",
   "drivers": [
     {
-      "id": "88668",
+      "driverId": "88668",
+      "carrierId": "samsara-docs-carrier",
       "firstName": "Susan",
       "lastName": "Bob",
-      "status": "active",
-      "username": "susan.bob"
+      "licenseNumber": "D1234567",
+      "status": "DRIVER_STATUS_ACTIVE",
+      "source": {
+        "provider": "SOURCE_PROVIDER_SAMSARA",
+        "providerAccountId": "samsara-docs-account",
+        "providerRecordType": "driver",
+        "primaryExternalId": "88668",
+        "nativeStatus": "active"
+      }
     }
   ],
   "vehicles": [
     {
-      "id": "28147498",
-      "name": "Truck 12",
+      "vehicleId": "28147498",
+      "carrierId": "samsara-docs-carrier",
       "vin": "1FUJGLDR9CSBC1234",
-      "licensePlate": "ABC123"
+      "name": "Truck 12",
+      "licensePlate": "ABC123",
+      "source": {
+        "provider": "SOURCE_PROVIDER_SAMSARA",
+        "providerAccountId": "samsara-docs-account",
+        "providerRecordType": "vehicle",
+        "primaryExternalId": "28147498"
+      }
     }
   ],
   "hosEvents": [
     {
-      "id": "hos-log-1",
+      "eventId": "hos-log-1",
       "driverId": "88668",
       "vehicleId": "28147498",
-      "status": "offDuty",
-      "startTime": "2020-01-27T07:06:25Z",
-      "endTime": "2020-01-27T08:06:25Z",
-      "latitude": 37.7749,
-      "longitude": -122.4194,
-      "note": "Start shift"
+      "eventTimestamp": "2020-01-27T07:06:25Z",
+      "eventType": "EVENT_TYPE_DUTY_STATUS_CHANGE",
+      "eventCode": "HOS_EVENT_CODE_OFF_DUTY",
+      "dutyStatus": "DUTY_STATUS_OFF_DUTY",
+      "position": {
+        "latitude": 37.7749,
+        "longitude": -122.4194
+      },
+      "origin": "EVENT_ORIGIN_DRIVER",
+      "recordStatus": "RECORD_STATUS_ACTIVE",
+      "annotation": {
+        "text": "Start shift"
+      },
+      "source": {
+        "provider": "SOURCE_PROVIDER_SAMSARA",
+        "providerAccountId": "samsara-docs-account",
+        "providerRecordType": "hos_log",
+        "primaryExternalId": "hos-log-1",
+        "nativeStatus": "offDuty"
+      }
     }
   ],
   "gpsLocations": [
     {
-      "id": "28147498",
+      "locationId": "28147498",
       "vehicleId": "28147498",
-      "driverId": null,
       "timestamp": "2020-01-27T07:06:25Z",
-      "latitude": 37.7749,
-      "longitude": -122.4194,
-      "speedKph": 88.51,
-      "headingDegrees": 180
+      "position": {
+        "latitude": 37.7749,
+        "longitude": -122.4194
+      },
+      "speed": {
+        "kilometersPerHour": 88.51
+      },
+      "heading": {
+        "degrees": 180
+      },
+      "engineHours": {
+        "seconds": 45000
+      },
+      "source": {
+        "provider": "SOURCE_PROVIDER_SAMSARA",
+        "providerAccountId": "samsara-docs-account",
+        "providerRecordType": "vehicle_location",
+        "primaryExternalId": "28147498"
+      }
     }
   ],
   "dvirs": [
     {
-      "id": "dvir-1",
+      "dvirId": "dvir-1",
       "driverId": "88668",
       "vehicleId": "28147498",
       "inspectionTime": "2020-01-27T09:00:00Z",
       "isSafeToDrive": true,
-      "defectCount": 1
+      "defects": [
+        {
+          "defectId": "dvir-1-defect-1",
+          "title": "Brake wear",
+          "description": "Brake wear",
+          "mechanicNotes": "Inspection scheduled"
+        }
+      ],
+      "mechanicNotes": "Inspection scheduled",
+      "source": {
+        "provider": "SOURCE_PROVIDER_SAMSARA",
+        "providerAccountId": "samsara-docs-account",
+        "providerRecordType": "dvir",
+        "primaryExternalId": "dvir-1",
+        "nativeStatus": "safe"
+      }
     }
   ],
-  "sync": {
-    "kind": "cursor",
-    "token": "cursor-123",
-    "hasMore": true
-  }
+  "warnings": [
+    "Samsara HOS clocks are captured in the provider payload but are not projected into the normalization response."
+  ]
 }

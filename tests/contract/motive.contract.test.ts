@@ -1,7 +1,17 @@
 import { describe, expect, test } from "bun:test";
+import { create } from "@bufbuild/protobuf";
 
-import { buildMotiveCanonicalSnapshot } from "../../src/fixture-normalization";
-import { expectOfficialDocsMetadata, readJson } from "./support";
+import { loadMotiveFixtureSet } from "../../src/fixtures/load-provider-fixture";
+import { normalizeProviderPayload } from "../../src/services/normalization-service";
+import {
+  NormalizeProviderPayloadRequestSchema,
+  NormalizeProviderPayloadResponseSchema,
+} from "../../gen/ts/services/normalization/service_pb";
+import {
+  expectOfficialDocsMetadata,
+  readJson,
+  serializeMessage,
+} from "./support";
 
 describe("Motive canonical fixtures", () => {
   const driversMetadata = readJson<any>(
@@ -20,20 +30,6 @@ describe("Motive canonical fixtures", () => {
     "tests/fixtures/providers/motive/page-sync/metadata.json",
   );
 
-  const drivers = readJson<any>("tests/fixtures/providers/motive/drivers/raw.json");
-  const vehicles = readJson<any>(
-    "tests/fixtures/providers/motive/vehicles/raw.json",
-  );
-  const hosLogs = readJson<any>(
-    "tests/fixtures/providers/motive/hos-logs/raw.json",
-  );
-  const vehicleLocations = readJson<any>(
-    "tests/fixtures/providers/motive/vehicle-locations/raw.json",
-  );
-  const pageSync = readJson<any>(
-    "tests/fixtures/providers/motive/page-sync/raw.json",
-  );
-
   test("fixture provenance checks", () => {
     [
       driversMetadata,
@@ -47,46 +43,45 @@ describe("Motive canonical fixtures", () => {
   });
 
   test("provider contract checks", () => {
-    expect(typeof drivers.users[0].user.id).toBe("number");
-    expect(typeof drivers.users[0].user.first_name).toBe("string");
-    expect(typeof drivers.users[0].user.current_location.lat).toBe("number");
-    expect(typeof drivers.users[0].user.current_vehicle.id).toBe("number");
+    const payload = loadMotiveFixtureSet();
 
-    expect(typeof vehicles.vehicles[0].vehicle.id).toBe("number");
-    expect(typeof vehicles.vehicles[0].vehicle.number).toBe("string");
-    expect(typeof vehicles.pagination.page_no).toBe("number");
-
-    expect(typeof hosLogs.logs[0].log.driver.id).toBe("number");
-    expect(typeof hosLogs.logs[0].log.events[0].event.type).toBe("string");
-    expect(typeof hosLogs.logs[0].log.events[0].event.start_time).toBe("string");
-    expect(typeof hosLogs.logs[0].log.inspection_reports[0].inspection_report.id).toBe(
-      "number",
+    expect(payload.drivers[0]?.normalizedProjection?.providerDriverId).toBe("156");
+    expect(payload.vehicles[0]?.normalizedProjection?.providerVehicleId).toBe("6620");
+    expect(payload.hosLogs[0]?.normalizedProjection?.providerEventId).toBe("221");
+    expect(payload.hosClocks[0]?.normalizedProjection?.remainingSeconds).toBe(
+      39600,
     );
-
-    expect(typeof vehicleLocations.vehicles[0].vehicle.current_location.lat).toBe(
-      "number",
+    expect(payload.gpsLocations[0]?.normalizedProjection?.providerLocationId).toBe(
+      "af5b6e0d-c442-414c-88d2-d95e5cb7affe",
     );
-    expect(typeof vehicleLocations.vehicles[0].vehicle.current_location.speed).toBe(
-      "number",
-    );
-
-    expect(typeof pageSync.users[0].user.available_time.drive).toBe("number");
-    expect(typeof pageSync.pagination.page_no).toBe("number");
+    expect(payload.dvirs[0]?.normalizedProjection?.providerDvirId).toBe("9");
+    expect(payload.checkpoints[0]?.pageToken).toBe("1/25");
   });
 
   test("canonical golden checks", () => {
-    const normalized = buildMotiveCanonicalSnapshot({
-      drivers,
-      vehicles,
-      hosLogs,
-      vehicleLocations,
-      pageSync,
+    const payload = loadMotiveFixtureSet();
+    const request = create(NormalizeProviderPayloadRequestSchema, {
+      providerPayload: {
+        case: "motive",
+        value: payload,
+      },
     });
+    const normalized = normalizeProviderPayload(request);
     const golden = readJson<any>("tests/fixtures/normalized/motive/canonical.json");
+    const serialized = serializeMessage(
+      NormalizeProviderPayloadResponseSchema,
+      normalized,
+    );
 
-    expect(normalized.sync.kind).toBe("page");
-    expect(normalized.sync.token).toBe("1/25");
-    expect(normalized.sync.hasMore).toBe(false);
-    expect(normalized).toEqual(golden);
+    expect(normalized.drivers[0]?.driverId).toBe("156");
+    expect(normalized.vehicles[0]?.vehicleId).toBe("6620");
+    expect(normalized.hosEvents[0]?.eventId).toBe("221");
+    expect(normalized.gpsLocations[0]?.locationId).toBe(
+      "af5b6e0d-c442-414c-88d2-d95e5cb7affe",
+    );
+    expect(normalized.warnings).toContain(
+      "Motive sync checkpoint page-sync remains page-based at 1/25.",
+    );
+    expect(serialized).toEqual(golden);
   });
 });

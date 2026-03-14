@@ -1,7 +1,17 @@
 import { describe, expect, test } from "bun:test";
+import { create } from "@bufbuild/protobuf";
 
-import { buildSamsaraCanonicalSnapshot } from "../../src/fixture-normalization";
-import { expectOfficialDocsMetadata, readJson } from "./support";
+import { loadSamsaraFixtureSet } from "../../src/fixtures/load-provider-fixture";
+import { normalizeProviderPayload } from "../../src/services/normalization-service";
+import {
+  NormalizeProviderPayloadRequestSchema,
+  NormalizeProviderPayloadResponseSchema,
+} from "../../gen/ts/services/normalization/service_pb";
+import {
+  expectOfficialDocsMetadata,
+  readJson,
+  serializeMessage,
+} from "./support";
 
 describe("Samsara canonical fixtures", () => {
   const driversMetadata = readJson<any>(
@@ -26,24 +36,6 @@ describe("Samsara canonical fixtures", () => {
     "tests/fixtures/providers/samsara/feed-cursor/metadata.json",
   );
 
-  const drivers = readJson<any>("tests/fixtures/providers/samsara/drivers/raw.json");
-  const vehicles = readJson<any>(
-    "tests/fixtures/providers/samsara/vehicles/raw.json",
-  );
-  const hosLogs = readJson<any>(
-    "tests/fixtures/providers/samsara/hos-logs/raw.json",
-  );
-  const hosClocks = readJson<any>(
-    "tests/fixtures/providers/samsara/hos-clocks/raw.json",
-  );
-  const vehicleLocations = readJson<any>(
-    "tests/fixtures/providers/samsara/vehicle-locations/raw.json",
-  );
-  const dvirs = readJson<any>("tests/fixtures/providers/samsara/dvirs/raw.json");
-  const feedCursor = readJson<any>(
-    "tests/fixtures/providers/samsara/feed-cursor/raw.json",
-  );
-
   test("fixture provenance checks", () => {
     [
       driversMetadata,
@@ -59,49 +51,49 @@ describe("Samsara canonical fixtures", () => {
   });
 
   test("provider contract checks", () => {
-    expect(typeof drivers.data[0].id).toBe("string");
-    expect(typeof drivers.data[0].name).toBe("string");
-    expect(typeof drivers.data[0].driverActivationStatus).toBe("string");
+    const payload = loadSamsaraFixtureSet();
 
-    expect(typeof vehicles.data[0].id).toBe("string");
-    expect(typeof vehicles.data[0].vin).toBe("string");
-
-    expect(typeof hosLogs.data[0].startTime).toBe("string");
-    expect(typeof hosLogs.data[0].endTime).toBe("string");
-    expect(typeof hosLogs.data[0].hosStatusType).toBe("string");
-    expect(typeof hosLogs.data[0].startLocation.latitude).toBe("number");
-    expect(typeof hosLogs.data[0].startLocation.longitude).toBe("number");
-
-    expect(typeof hosClocks.data[0].driver.id).toBe("string");
-    expect(typeof hosClocks.data[0].clocks.cycle.cycleRemainingDurationMs).toBe(
-      "number",
+    expect(payload.drivers[0]?.id).toBe("88668");
+    expect(payload.drivers[0]?.normalizedProjection?.providerDriverId).toBe(
+      "88668",
     );
-    expect(typeof hosClocks.data[0].clocks.drive.driveRemainingDurationMs).toBe(
-      "number",
+    expect(payload.vehicles[0]?.normalizedProjection?.vin).toBe(
+      "1FUJGLDR9CSBC1234",
     );
-
-    expect(typeof vehicleLocations.data[0].gps.speedMilesPerHour).toBe("number");
-    expect(typeof vehicleLocations.pagination.endCursor).toBe("string");
-    expect(typeof vehicleLocations.pagination.hasNextPage).toBe("boolean");
-
-    expect(typeof dvirs.data[0].safetyStatus).toBe("string");
-    expect(Array.isArray(dvirs.data[0].defects)).toBe(true);
+    expect(payload.hosLogs[0]?.normalizedProjection?.dutyStatus).toBe(
+      "offDuty",
+    );
+    expect(payload.gpsLocations[0]?.normalizedProjection?.speedKilometersPerHour).toBe(
+      88.51,
+    );
+    expect(payload.checkpoints[0]?.cursor).toBe("cursor-123");
+    expect(payload.dvirs[0]?.normalizedProjection?.defectDescriptions.length).toBe(
+      1,
+    );
   });
 
   test("canonical golden checks", () => {
-    const normalized = buildSamsaraCanonicalSnapshot({
-      drivers,
-      vehicles,
-      hosLogs,
-      vehicleLocations,
-      dvirs,
-      feedCursor,
+    const payload = loadSamsaraFixtureSet();
+    const request = create(NormalizeProviderPayloadRequestSchema, {
+      providerPayload: {
+        case: "samsara",
+        value: payload,
+      },
     });
+    const normalized = normalizeProviderPayload(request);
     const golden = readJson<any>("tests/fixtures/normalized/samsara/canonical.json");
+    const serialized = serializeMessage(
+      NormalizeProviderPayloadResponseSchema,
+      normalized,
+    );
 
-    expect(normalized.sync.kind).toBe("cursor");
-    expect(normalized.sync.token).toBe("cursor-123");
-    expect(normalized.sync.hasMore).toBe(true);
-    expect(normalized).toEqual(golden);
+    expect(normalized.drivers[0]?.driverId).toBe("88668");
+    expect(normalized.vehicles[0]?.vehicleId).toBe("28147498");
+    expect(normalized.hosEvents[0]?.driverId).toBe("88668");
+    expect(normalized.gpsLocations[0]?.vehicleId).toBe("28147498");
+    expect(normalized.warnings).toContain(
+      "Samsara HOS clocks are captured in the provider payload but are not projected into the normalization response.",
+    );
+    expect(serialized).toEqual(golden);
   });
 });
