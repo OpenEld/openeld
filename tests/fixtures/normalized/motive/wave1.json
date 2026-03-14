@@ -1,0 +1,93 @@
+{
+  "provider": "motive",
+  "fixtureAuthority": "official-docs",
+  "drivers": [
+    {
+      "id": "104",
+      "firstName": "Jensen",
+      "lastName": "Effertz",
+      "status": "deactivated",
+      "username": null
+    },
+    {
+      "id": "11",
+      "firstName": "2",
+      "lastName": "Fo2",
+      "status": "active",
+      "username": null
+    },
+    {
+      "id": "156",
+      "firstName": "Harold",
+      "lastName": "Hoeger",
+      "status": "deactivated",
+      "username": "hobart"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "11",
+      "name": "12345",
+      "vin": null,
+      "licensePlate": null
+    },
+    {
+      "id": "23",
+      "name": "V-1000",
+      "vin": null,
+      "licensePlate": null
+    },
+    {
+      "id": "32",
+      "name": "V-1000",
+      "vin": "WP0AB2966NS458669",
+      "licensePlate": null
+    },
+    {
+      "id": "6620",
+      "name": "6620",
+      "vin": null,
+      "licensePlate": null
+    }
+  ],
+  "hosEvents": [
+    {
+      "id": "221",
+      "driverId": "11",
+      "vehicleId": "11",
+      "status": "driving",
+      "startTime": "2016-10-16T07:00:00Z",
+      "endTime": "2016-10-16T09:00:00Z",
+      "latitude": null,
+      "longitude": null,
+      "note": "Mobile, AL"
+    }
+  ],
+  "gpsLocations": [
+    {
+      "id": "23",
+      "vehicleId": "23",
+      "driverId": "104",
+      "timestamp": "2016-03-17T12:12:07Z",
+      "latitude": 47.565647,
+      "longitude": -122.276261,
+      "speedKph": 104.77,
+      "headingDegrees": 90
+    }
+  ],
+  "dvirs": [
+    {
+      "id": "9",
+      "driverId": "11",
+      "vehicleId": "4",
+      "inspectionTime": "2016-07-22T14:00:00Z",
+      "isSafeToDrive": true,
+      "defectCount": 0
+    }
+  ],
+  "sync": {
+    "kind": "page",
+    "token": "1/25",
+    "hasMore": false
+  }
+}

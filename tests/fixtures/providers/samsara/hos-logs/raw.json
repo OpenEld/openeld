@@ -1,0 +1,21 @@
+{
+  "data": [
+    {
+      "id": "hos-log-1",
+      "driverId": "88668",
+      "vehicleId": "28147498",
+      "startTime": "2020-01-27T07:06:25Z",
+      "endTime": "2020-01-27T08:06:25Z",
+      "hosStatusType": "offDuty",
+      "origin": "driver",
+      "startLocation": {
+        "latitude": 37.7749,
+        "longitude": -122.4194,
+        "description": "San Francisco, CA"
+      },
+      "remark": "Start shift",
+      "certified": true,
+      "sequenceNumber": 1
+    }
+  ]
+}

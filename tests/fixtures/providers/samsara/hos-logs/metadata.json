@@ -1,0 +1,13 @@
+{
+  "provider": "samsara",
+  "resource": "hos-logs",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.samsara.com/reference/gethoslogs",
+  "apiVersion": "public-docs",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "HOS log fixture is assembled from official response descriptions and published endpoint fields.",
+  "supportedDomains": ["hos_event"],
+  "notes": "Public docs clearly describe time range, vehicle, duty status, and start location, but not a full live payload."
+}

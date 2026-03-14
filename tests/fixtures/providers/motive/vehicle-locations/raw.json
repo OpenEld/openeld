@@ -1,0 +1,53 @@
+{
+  "vehicles": [
+    {
+      "vehicle": {
+        "id": 23,
+        "number": "V-1000",
+        "year": null,
+        "make": null,
+        "model": null,
+        "vin": null,
+        "fuel_type": "diesel",
+        "current_location": {
+          "id": "af5b6e0d-c442-414c-88d2-d95e5cb7affe",
+          "lat": 47.565647,
+          "lon": -122.276261,
+          "description": "Seattle, WA",
+          "located_at": "2016-03-17T12:12:07Z",
+          "bearing": 90,
+          "battery_voltage": 12,
+          "type": "vehicle_moving",
+          "speed": 65.1,
+          "engine_hours": 123.56,
+          "fuel": 121.33,
+          "fuel_primary_remaining_percentage": 50.5,
+          "fuel_secondary_remaining_percentage": 90.5,
+          "odometer": 456.22,
+          "true_odometer": 160.2742,
+          "true_engine_hours": 38.5,
+          "veh_range": 10.1,
+          "hvb_state_of_charge": 20.2,
+          "hvb_charge_status": 0,
+          "hvb_charge_source": 1,
+          "hvb_lifetime_energy_output": 30.3
+        },
+        "current_driver": {
+          "id": 104,
+          "first_name": "Jensen",
+          "last_name": "Effertz",
+          "username": null,
+          "email": "6b6cf86e12d4@keeptruckin.com",
+          "driver_company_id": null,
+          "status": "deactivated",
+          "role": "driver"
+        }
+      }
+    }
+  ],
+  "pagination": {
+    "per_page": 25,
+    "page_no": 1,
+    "total": 1
+  }
+}

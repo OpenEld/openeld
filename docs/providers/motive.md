@@ -4,7 +4,7 @@
 
 - Regulatory scope: U.S. ELD / compliance capable
 - Target maturity: Wave 1
-- Current status: Planned
+- Current status: Doc-verified Wave 1 fixtures and contract tests committed
 
 ## Auth
 
@@ -31,6 +31,6 @@
 
 ## Verification Priority
 
-- capture official or sandbox log payloads
-- capture page-based pagination examples
-- verify unit conversion assumptions against real payloads
+- committed fixtures: `drivers`, `vehicles`, `hos-logs`, `vehicle-locations`, `page-sync`
+- test coverage: fixture provenance, provider contract shape, canonical golden normalization, page-based sync semantics
+- remaining upgrade path: validate unit conversion assumptions against sandbox or production captures

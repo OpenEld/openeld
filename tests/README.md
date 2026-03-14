@@ -12,6 +12,7 @@ This package uses high-signal TDD for provider onboarding and normalization work
 ## High-Signal Rules
 
 - prefer tests built from authoritative provider payloads over synthetic payloads
+- allow doc-verified fixtures when sandbox or live captures are not yet available, but mark schema-derived cases explicitly
 - start with failing provider contract and normalization tests before implementation
 - keep a small number of golden fixtures that reflect real provider behavior
 - avoid tests that only restate implementation details or validate trivial getters and setters

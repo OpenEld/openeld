@@ -1,0 +1,13 @@
+{
+  "provider": "motive",
+  "resource": "hos-logs",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developer.gomotive.com/reference/list-the-hours-of-service-hos-logs-of-the-drivers-copy",
+  "apiVersion": "v2",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture copies a published HOS log example including driver, vehicle, events, and inspection report details.",
+  "supportedDomains": ["hos_event", "driver", "vehicle", "dvir"],
+  "notes": "This is the highest-signal public example currently available for Motive HOS coverage."
+}

@@ -4,7 +4,7 @@
 
 - Regulatory scope: U.S. ELD / compliance capable
 - Target maturity: Wave 1
-- Current status: Planned
+- Current status: Doc-verified Wave 1 fixtures and contract tests committed
 
 ## Auth
 
@@ -33,6 +33,6 @@
 
 ## Verification Priority
 
-- capture official or sandbox HOS log examples
-- capture clock examples
-- capture feed pagination examples with cursors
+- committed fixtures: `drivers`, `vehicles`, `hos-logs`, `hos-clocks`, `vehicle-locations`, `dvirs`, `feed-cursor`
+- test coverage: fixture provenance, provider contract shape, canonical golden normalization, cursor sync semantics
+- remaining upgrade path: replace doc-derived fixture set with sandbox or production captures when credentials are available

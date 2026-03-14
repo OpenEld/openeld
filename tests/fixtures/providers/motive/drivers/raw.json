@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "user": {
+        "id": 156,
+        "first_name": "Harold",
+        "last_name": "Hoeger",
+        "username": "hobart",
+        "email": null,
+        "driver_company_id": null,
+        "status": "deactivated",
+        "role": "driver",
+        "current_location": {
+          "id": 1395371911,
+          "lat": -59.8708336274616,
+          "lon": -91.2958210901819,
+          "description": "Washington, AZ",
+          "located_at": "2016-03-17T12:12:07Z"
+        },
+        "current_vehicle": {
+          "id": 32,
+          "number": "V-1000",
+          "year": "2016",
+          "make": null,
+          "model": null,
+          "vin": "WP0AB2966NS458669"
+        }
+      }
+    }
+  ],
+  "pagination": {
+    "per_page": 25,
+    "page_no": 1,
+    "total": 1
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "provider": "samsara",
+  "resource": "feed-cursor",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.samsara.com/docs/vehicle-stats-feed",
+  "apiVersion": "public-docs",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "Cursor lifecycle is captured from official telematics sync guidance.",
+  "supportedDomains": ["sync"],
+  "notes": "Samsara sync model uses endCursor plus hasNextPage semantics."
+}

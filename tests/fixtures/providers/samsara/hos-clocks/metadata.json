@@ -1,0 +1,13 @@
+{
+  "provider": "samsara",
+  "resource": "hos-clocks",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.samsara.com/reference/gethosclocks",
+  "apiVersion": "public-docs",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture is based on official published example values surfaced in Samsara public docs/search snippets.",
+  "supportedDomains": ["hos_clock"],
+  "notes": "This is the strongest public example available for Wave 1 clock coverage."
+}

@@ -1,0 +1,13 @@
+{
+  "provider": "geotab",
+  "resource": "getfeed",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.geotab.com/myGeotab/apiReference/methods/GetFeed",
+  "apiVersion": "myGeotab",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "method-docs",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture captures documented fromVersion and toVersion feed semantics from official Geotab docs.",
+  "supportedDomains": ["sync"],
+  "notes": "GetFeed uses version-token sync rather than page or cursor polling."
+}

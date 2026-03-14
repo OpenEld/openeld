@@ -1,0 +1,61 @@
+{
+  "provider": "samsara",
+  "fixtureAuthority": "official-docs",
+  "drivers": [
+    {
+      "id": "88668",
+      "firstName": "Susan",
+      "lastName": "Bob",
+      "status": "active",
+      "username": "susan.bob"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "28147498",
+      "name": "Truck 12",
+      "vin": "1FUJGLDR9CSBC1234",
+      "licensePlate": "ABC123"
+    }
+  ],
+  "hosEvents": [
+    {
+      "id": "hos-log-1",
+      "driverId": "88668",
+      "vehicleId": "28147498",
+      "status": "offDuty",
+      "startTime": "2020-01-27T07:06:25Z",
+      "endTime": "2020-01-27T08:06:25Z",
+      "latitude": 37.7749,
+      "longitude": -122.4194,
+      "note": "Start shift"
+    }
+  ],
+  "gpsLocations": [
+    {
+      "id": "28147498",
+      "vehicleId": "28147498",
+      "driverId": null,
+      "timestamp": "2020-01-27T07:06:25Z",
+      "latitude": 37.7749,
+      "longitude": -122.4194,
+      "speedKph": 88.51,
+      "headingDegrees": 180
+    }
+  ],
+  "dvirs": [
+    {
+      "id": "dvir-1",
+      "driverId": "88668",
+      "vehicleId": "28147498",
+      "inspectionTime": "2020-01-27T09:00:00Z",
+      "isSafeToDrive": true,
+      "defectCount": 1
+    }
+  ],
+  "sync": {
+    "kind": "cursor",
+    "token": "cursor-123",
+    "hasMore": true
+  }
+}

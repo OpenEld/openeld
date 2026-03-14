@@ -1,0 +1,13 @@
+{
+  "provider": "samsara",
+  "resource": "drivers",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.samsara.com/reference/listdrivers",
+  "apiVersion": "public-docs",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "Doc-verified fixture assembled from official published fields and search-indexed example details.",
+  "supportedDomains": ["driver"],
+  "notes": "Driver fixture is doc-verified, not sandbox/live captured."
+}

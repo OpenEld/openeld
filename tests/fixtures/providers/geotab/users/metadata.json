@@ -1,0 +1,13 @@
+{
+  "provider": "geotab",
+  "resource": "users",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.geotab.com/myGeotab/apiReference/objects/User/",
+  "apiVersion": "myGeotab",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "object-docs",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture is schema-derived from Geotab object docs because the public reference emphasizes documented properties over static response examples.",
+  "supportedDomains": ["driver"],
+  "notes": "Geotab Wave 1 fixtures are property-doc-verified rather than full sample payloads."
+}

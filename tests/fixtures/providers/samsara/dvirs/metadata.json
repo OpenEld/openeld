@@ -1,0 +1,13 @@
+{
+  "provider": "samsara",
+  "resource": "dvirs",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.samsara.com/reference/getdvirs",
+  "apiVersion": "public-docs",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture uses fields called out in public DVIR and defect docs, including safe/unsafe state and defect resolution details.",
+  "supportedDomains": ["dvir"],
+  "notes": "DVIR coverage is doc-derived pending sandbox/live capture."
+}

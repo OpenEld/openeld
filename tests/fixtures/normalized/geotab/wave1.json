@@ -1,0 +1,52 @@
+{
+  "provider": "geotab",
+  "fixtureAuthority": "official-docs",
+  "drivers": [
+    {
+      "id": "b1",
+      "firstName": "Alex",
+      "lastName": "Driver",
+      "status": "active",
+      "username": "alex.driver@example.com"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "d1",
+      "name": "Truck 204",
+      "vin": "G9-000000123",
+      "licensePlate": null
+    }
+  ],
+  "hosEvents": [
+    {
+      "id": "dsl-1",
+      "driverId": "b1",
+      "vehicleId": "d1",
+      "status": "Driving",
+      "startTime": "2024-08-01T12:00:00Z",
+      "endTime": null,
+      "latitude": 43.6532,
+      "longitude": -79.3832,
+      "note": "Automatic"
+    }
+  ],
+  "gpsLocations": [
+    {
+      "id": "lr-1",
+      "vehicleId": "d1",
+      "driverId": null,
+      "timestamp": "2024-08-01T12:05:00Z",
+      "latitude": 43.6532,
+      "longitude": -79.3832,
+      "speedKph": 88,
+      "headingDegrees": null
+    }
+  ],
+  "dvirs": [],
+  "sync": {
+    "kind": "version",
+    "token": "4",
+    "hasMore": null
+  }
+}

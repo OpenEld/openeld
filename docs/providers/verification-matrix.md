@@ -2,9 +2,9 @@
 
 | Provider | Fixture Source | Last Verified | Auth Tested | Sync Tested | Driver | Vehicle | HOS Events | HOS Clocks | GPS | DVIR | Safety | IFTA | Assets | Inferred Mappings Remaining | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Samsara | Not captured yet | Not verified | No | No | No | No | No | No | No | No | No | No | No | Yes | Planned |
-| Motive | Not captured yet | Not verified | No | No | No | No | No | No | No | No | No | No | No | Yes | Planned |
-| Geotab | Not captured yet | Not verified | No | No | No | No | No | No | No | No | No | No | No | Yes | Planned |
+| Samsara | Official docs examples and sync docs | 2026-03-14 | No | Yes | Yes | Yes | Yes | Yes | Yes | Yes | No | No | No | Yes | Doc-verified Wave 1 |
+| Motive | Official docs examples | 2026-03-14 | No | Yes | Yes | Yes | Yes | Yes | Yes | Yes | No | No | No | Yes | Doc-verified Wave 1 |
+| Geotab | Official object and method docs (schema-derived fixtures) | 2026-03-14 | No | Yes | Yes | Yes | Yes | Yes | Yes | No | No | No | No | Yes | Doc-verified Wave 1 |
 | KeepTruckin | Not captured yet | Not verified | No | No | No | No | No | No | No | No | No | No | No | Yes | Planned |
 | TT ELD | Not captured yet | Not verified | No | No | No | No | No | No | No | No | No | No | No | Yes | Planned |
 | EZLOGZ | Not captured yet | Not verified | No | No | No | No | No | No | No | No | No | No | No | Yes | Planned |

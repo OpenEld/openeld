@@ -4,7 +4,7 @@
 
 - Regulatory scope: U.S. ELD / compliance capable
 - Target maturity: Wave 1
-- Current status: Planned
+- Current status: Doc-verified Wave 1 fixtures and contract tests committed
 
 ## Auth
 
@@ -28,9 +28,10 @@
 - HOS data centers on `DutyStatusLog` and related types
 - event semantics are richer and more system-oriented than some other providers
 - license number availability may depend on custom fields or account configuration
+- initial Wave 1 fixtures are schema-derived from official object and method docs because public static payload examples are limited
 
 ## Verification Priority
 
-- capture `DutyStatusLog` examples
-- capture `DriverRegulation` or clock-related examples
-- capture `GetFeed` pagination/version examples
+- committed fixtures: `users`, `devices`, `duty-status-logs`, `driver-regulations`, `log-records`, `getfeed`
+- test coverage: fixture provenance, provider contract shape, canonical golden normalization, version-token sync semantics
+- remaining upgrade path: replace schema-derived fixtures with recorded `Get` and `GetFeed` payloads from a sandbox or live tenant

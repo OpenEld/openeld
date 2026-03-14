@@ -1,0 +1,46 @@
+{
+  "vehicles": [
+    {
+      "vehicle": {
+        "id": 6620,
+        "company_id": 2178,
+        "number": "6620",
+        "status": "active",
+        "ifta": true,
+        "vin": "",
+        "make": "Freightliner",
+        "model": "Conv",
+        "year": "2006",
+        "license_plate_state": null,
+        "license_plate_number": "",
+        "metric_units": false,
+        "fuel_type": "diesel",
+        "prevent_auto_odometer_entry": false,
+        "notes": null,
+        "group_ids": [],
+        "created_at": "2017-01-01T00:00:00Z",
+        "updated_at": "2024-07-31T05:30:53Z",
+        "permanent_driver": null,
+        "eld_device": {
+          "id": 746694,
+          "identifier": "AABL36FB400300",
+          "model": "lbb-3.6ca"
+        },
+        "current_driver": null,
+        "external_ids": []
+      },
+      "availability_details": {
+        "availability_status": "out_of_service",
+        "out_of_service_reason": "Vehicle Maintenance",
+        "updated_at": "2024-07-31T05:30:53Z",
+        "additional_note": "This vehicle is scheduled for maintenance",
+        "custom_driver_app_warning_prompt": "This vehicle is scheduled for maintenance, please don't operate"
+      }
+    }
+  ],
+  "pagination": {
+    "per_page": 25,
+    "page_no": 1,
+    "total": 2192
+  }
+}

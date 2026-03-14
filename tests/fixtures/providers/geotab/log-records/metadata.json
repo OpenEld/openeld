@@ -1,0 +1,13 @@
+{
+  "provider": "geotab",
+  "resource": "log-records",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.geotab.com/myGeotab/apiReference/objects/LogRecord/",
+  "apiVersion": "myGeotab",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "object-docs",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture is schema-derived from Geotab LogRecord property docs.",
+  "supportedDomains": ["gps_location"],
+  "notes": "LogRecord speed is documented as km/h."
+}

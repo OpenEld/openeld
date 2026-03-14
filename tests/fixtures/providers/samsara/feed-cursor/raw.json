@@ -1,0 +1,9 @@
+{
+  "pagination": {
+    "endCursor": "cursor-123",
+    "hasNextPage": true
+  },
+  "pollingGuidance": {
+    "minimumBackoffSeconds": 5
+  }
+}

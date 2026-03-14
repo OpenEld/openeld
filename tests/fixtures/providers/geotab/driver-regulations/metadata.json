@@ -1,0 +1,13 @@
+{
+  "provider": "geotab",
+  "resource": "driver-regulations",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.geotab.com/myGeotab/apiReference/objects/DriverRegulation/",
+  "apiVersion": "myGeotab",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "object-docs",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture is schema-derived from Geotab DriverRegulation property docs.",
+  "supportedDomains": ["hos_clock"],
+  "notes": "Clock and availability semantics are documented through DriverRegulation and related availability objects."
+}

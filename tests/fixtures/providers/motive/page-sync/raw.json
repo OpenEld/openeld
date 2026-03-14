@@ -1,0 +1,41 @@
+{
+  "users": [
+    {
+      "user": {
+        "duty_status": "on_duty",
+        "id": 11,
+        "first_name": "2",
+        "last_name": "Fo2",
+        "username": null,
+        "email": "5706204b3c84@keeptruckin.com",
+        "driver_company_id": null,
+        "status": "active",
+        "role": "driver",
+        "available_time": {
+          "cycle": 214800,
+          "shift": 49200,
+          "drive": 39600,
+          "break": 27600
+        },
+        "recap": {
+          "seconds_available": 216000,
+          "seconds_tomorrow": 214800
+        },
+        "last_hos_status": {
+          "status": "on_duty",
+          "time": "2016-02-15T13:40:00Z"
+        },
+        "last_cycle_reset": {
+          "type": "34_hour",
+          "start_time": "2020-03-27T23:59:32Z",
+          "end_time": "2020-03-29T09:59:32Z"
+        }
+      }
+    }
+  ],
+  "pagination": {
+    "per_page": 25,
+    "page_no": 1,
+    "total": 2
+  }
+}

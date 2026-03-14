@@ -1,0 +1,13 @@
+{
+  "provider": "geotab",
+  "resource": "duty-status-logs",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.geotab.com/myGeotab/apiReference/objects/DutyStatusLog/",
+  "apiVersion": "myGeotab",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "object-docs",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture is schema-derived from Geotab DutyStatusLog property documentation and unit notes.",
+  "supportedDomains": ["hos_event"],
+  "notes": "Public docs document fields, units, and status semantics but do not provide a full static payload example."
+}

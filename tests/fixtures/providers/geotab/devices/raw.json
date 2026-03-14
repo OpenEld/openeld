@@ -1,0 +1,11 @@
+{
+  "result": [
+    {
+      "Id": "d1",
+      "Name": "Truck 204",
+      "SerialNumber": "G9-000000123",
+      "ProductId": "GO9",
+      "TimeZoneId": "America/Toronto"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "provider": "samsara",
+  "resource": "vehicle-locations",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.samsara.com/reference/getvehiclestatsfeed",
+  "apiVersion": "public-docs",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "GPS and engine telemetry fields are derived from the official vehicle stats feed documentation.",
+  "supportedDomains": ["gps_location", "vehicle"],
+  "notes": "The fixture preserves feed semantics needed for cursor-based polling tests."
+}

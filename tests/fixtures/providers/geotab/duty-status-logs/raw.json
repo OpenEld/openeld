@@ -1,0 +1,24 @@
+{
+  "result": [
+    {
+      "Id": "dsl-1",
+      "Driver": {
+        "Id": "b1"
+      },
+      "Device": {
+        "Id": "d1"
+      },
+      "DateTime": "2024-08-01T12:00:00Z",
+      "Status": "Driving",
+      "EventType": 1,
+      "EventRecordStatus": 1,
+      "Origin": "Automatic",
+      "Location": {
+        "Latitude": 43.6532,
+        "Longitude": -79.3832
+      },
+      "Odometer": 1200450.0,
+      "EngineHours": 45000.0
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "provider": "motive",
+  "resource": "vehicle-locations",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developer.gomotive.com/reference/fetch-a-list-of-all-the-vehicles-and-their-locations-v2",
+  "apiVersion": "v2",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture copies the published v2 vehicle_locations example including speed, odometer, engine hours, and assigned driver.",
+  "supportedDomains": ["gps_location", "vehicle", "driver"],
+  "notes": "Vehicle location data is page-based in the official example."
+}

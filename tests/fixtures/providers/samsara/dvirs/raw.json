@@ -1,0 +1,19 @@
+{
+  "data": [
+    {
+      "id": "dvir-1",
+      "driverId": "88668",
+      "vehicleId": "28147498",
+      "createdAtTime": "2020-01-27T09:00:00Z",
+      "safetyStatus": "safe",
+      "defects": [
+        {
+          "defectType": "brakes",
+          "isResolved": false,
+          "comment": "Brake wear",
+          "mechanicNotes": "Inspection scheduled"
+        }
+      ]
+    }
+  ]
+}

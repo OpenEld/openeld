@@ -1,0 +1,18 @@
+{
+  "result": [
+    {
+      "Id": "reg-1",
+      "Driver": {
+        "Id": "b1"
+      },
+      "CurrentDutyStatus": "Driving",
+      "Availability": {
+        "Driving": 39600,
+        "Cycle": 252000,
+        "Break": 28800
+      },
+      "CycleSummaries": [],
+      "Violations": []
+    }
+  ]
+}

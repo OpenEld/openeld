@@ -1,0 +1,13 @@
+{
+  "provider": "motive",
+  "resource": "vehicles",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developer.gomotive.com/reference/list-all-the-company-vehicles",
+  "apiVersion": "v1",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture copies the published example payload from the official vehicles reference.",
+  "supportedDomains": ["vehicle"],
+  "notes": "Availability details are preserved to keep parity with the public example."
+}

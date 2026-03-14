@@ -1,0 +1,13 @@
+{
+  "provider": "motive",
+  "resource": "drivers",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developer.gomotive.com/reference/fetch-a-list-of-all-the-drivers-with-location-and-vehicle-info",
+  "apiVersion": "v1",
+  "capturedAt": "2026-03-14T00:00:00Z",
+  "authContext": "docs-example",
+  "sanitized": true,
+  "sanitizationNotes": "Fixture copies the published example payload from the official driver_locations reference.",
+  "supportedDomains": ["driver", "gps_location", "vehicle"],
+  "notes": "This is a doc-verified example payload from the public API reference."
+}

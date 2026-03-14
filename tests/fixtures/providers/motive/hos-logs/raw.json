@@ -1,0 +1,80 @@
+{
+  "logs": [
+    {
+      "log": {
+        "id": 47,
+        "date": "2016-11-22",
+        "metric_units": false,
+        "driver_first_name": "Demo",
+        "driver_last_name": "Driver",
+        "carrier_name": "Demo Carrier",
+        "eld_mode": "logs",
+        "driver": {
+          "id": 11,
+          "first_name": "Demo",
+          "last_name": "Driver",
+          "username": "demo_driver",
+          "email": null,
+          "driver_company_id": null,
+          "status": "active",
+          "role": "driver"
+        },
+        "vehicles": [
+          {
+            "vehicle": {
+              "id": 11,
+              "number": "12345",
+              "year": null,
+              "make": null,
+              "model": null,
+              "vin": null,
+              "metric_units": true
+            }
+          }
+        ],
+        "events": [
+          {
+            "event": {
+              "id": 221,
+              "type": "driving",
+              "notes": null,
+              "location": "Mobile, AL",
+              "start_time": "2016-10-16T07:00:00Z",
+              "end_time": "2016-10-16T09:00:00Z",
+              "is_manual": false
+            }
+          }
+        ],
+        "inspection_reports": [
+          {
+            "inspection_report": {
+              "id": 9,
+              "log_id": 47,
+              "date": "2016-07-22",
+              "time": "2016-07-22T14:00:00Z",
+              "odometer": 253,
+              "carrier_name": "Demo Carrier",
+              "location": "Omaha, NE",
+              "status": "corrected",
+              "inspection_type": "pre-trip",
+              "vehicle": {
+                "id": 4,
+                "number": "Demo Vehicle",
+                "year": "2016",
+                "make": "Demo",
+                "model": "Vehicle",
+                "vin": "WP0AB2966NS458669",
+                "metric_units": false
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "pagination": {
+    "per_page": 25,
+    "page_no": 1,
+    "total": 1
+  }
+}

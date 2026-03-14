@@ -1,0 +1,14 @@
+{
+  "result": [
+    {
+      "Id": "lr-1",
+      "Device": {
+        "Id": "d1"
+      },
+      "DateTime": "2024-08-01T12:05:00Z",
+      "Latitude": 43.6532,
+      "Longitude": -79.3832,
+      "Speed": 88.0
+    }
+  ]
+}
