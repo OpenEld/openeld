@@ -9,5 +9,5 @@
   "sanitized": true,
   "sanitizationNotes": "Fixture captures official page-based pagination and HOS availability semantics.",
   "supportedDomains": ["sync", "hos_clock"],
-  "notes": "Motive Wave 1 sync semantics are page based, not cursor based."
+  "notes": "Motive documented sync semantics are page based, not cursor based."
 }

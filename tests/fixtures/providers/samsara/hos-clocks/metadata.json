@@ -9,5 +9,5 @@
   "sanitized": true,
   "sanitizationNotes": "Fixture is based on official published example values surfaced in Samsara public docs/search snippets.",
   "supportedDomains": ["hos_clock"],
-  "notes": "This is the strongest public example available for Wave 1 clock coverage."
+  "notes": "This is the strongest public example available for committed clock coverage."
 }

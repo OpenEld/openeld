@@ -65,7 +65,7 @@ A provider is not production-ready until:
 - `verification-matrix.md` tracks how well each provider has been proven against real API truth
 - `provider-template.md` is the template for adding new provider notes
 
-## Wave 1 Notes
+## Current Provider Notes
 
 - `samsara.md`
 - `motive.md`

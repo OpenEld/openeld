@@ -3,8 +3,8 @@
 ## Summary
 
 - Regulatory scope: U.S. ELD / compliance capable
-- Target maturity: Wave 1
-- Current status: Doc-verified Wave 1 fixtures and contract tests committed
+- Target maturity: Planned
+- Current status: Doc-verified fixtures and contract tests committed
 
 ## Auth
 
@@ -28,7 +28,7 @@
 - HOS data centers on `DutyStatusLog` and related types
 - event semantics are richer and more system-oriented than some other providers
 - license number availability may depend on custom fields or account configuration
-- initial Wave 1 fixtures are schema-derived from official object and method docs because public static payload examples are limited
+- initial committed fixtures are schema-derived from official object and method docs because public static payload examples are limited
 
 ## Verification Priority
 

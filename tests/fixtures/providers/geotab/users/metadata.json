@@ -9,5 +9,5 @@
   "sanitized": true,
   "sanitizationNotes": "Fixture is schema-derived from Geotab object docs because the public reference emphasizes documented properties over static response examples.",
   "supportedDomains": ["driver"],
-  "notes": "Geotab Wave 1 fixtures are property-doc-verified rather than full sample payloads."
+  "notes": "Geotab committed fixtures are property-doc-verified rather than full sample payloads."
 }

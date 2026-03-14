@@ -1,1 +1,1 @@
-export * from "./wave1";
+export * from "./fixture-normalization";

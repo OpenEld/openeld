@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 
-import { normalizeGeotabWave1 } from "../../src/wave1";
+import { buildGeotabCanonicalSnapshot } from "../../src/fixture-normalization";
 import { expectOfficialDocsMetadata, readJson } from "./support";
 
-describe("Geotab Wave 1 fixtures", () => {
+describe("Geotab canonical fixtures", () => {
   const usersMetadata = readJson<any>(
     "tests/fixtures/providers/geotab/users/metadata.json",
   );
@@ -72,7 +72,7 @@ describe("Geotab Wave 1 fixtures", () => {
   });
 
   test("canonical golden checks", () => {
-    const normalized = normalizeGeotabWave1({
+    const normalized = buildGeotabCanonicalSnapshot({
       users,
       devices,
       dutyStatusLogs,
@@ -80,7 +80,7 @@ describe("Geotab Wave 1 fixtures", () => {
       logRecords,
       getfeed,
     });
-    const golden = readJson<any>("tests/fixtures/normalized/geotab/wave1.json");
+    const golden = readJson<any>("tests/fixtures/normalized/geotab/canonical.json");
 
     expect(normalized.sync.kind).toBe("version");
     expect(normalized.sync.token).toBe("4");

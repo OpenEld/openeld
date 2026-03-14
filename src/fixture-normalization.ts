@@ -47,13 +47,7 @@ export interface CanonicalDvir {
   defectCount: number;
 }
 
-export interface CanonicalSyncState {
-  kind: SyncMode;
-  token: string;
-  hasMore: boolean | null;
-}
-
-export interface Wave1Golden {
+export interface CanonicalSnapshot {
   provider: string;
   fixtureAuthority: "official-docs";
   drivers: CanonicalDriver[];
@@ -61,7 +55,11 @@ export interface Wave1Golden {
   hosEvents: CanonicalHosEvent[];
   gpsLocations: CanonicalGpsLocation[];
   dvirs: CanonicalDvir[];
-  sync: CanonicalSyncState;
+  sync: {
+    kind: SyncMode;
+    token: string;
+    hasMore: boolean | null;
+  };
 }
 
 const MPH_TO_KPH = 1.60934;
@@ -82,15 +80,15 @@ function splitName(name: string | null | undefined): {
     return { firstName: null, lastName: null };
   }
 
-  const parts = name.trim().split(/\s+/);
+  const [firstName, ...remainingParts] = name.trim().split(/\s+/);
 
-  if (parts.length === 1) {
-    return { firstName: parts[0], lastName: null };
+  if (!firstName) {
+    return { firstName: null, lastName: null };
   }
 
   return {
-    firstName: parts[0] ?? null,
-    lastName: parts.slice(1).join(" ") || null,
+    firstName,
+    lastName: remainingParts.join(" ") || null,
   };
 }
 
@@ -122,16 +120,16 @@ function sortById<T extends { id: string }>(values: T[]): T[] {
   return [...values].sort((left, right) => left.id.localeCompare(right.id));
 }
 
-export function normalizeSamsaraWave1(fixtures: {
+export function buildSamsaraCanonicalSnapshot(fixtures: {
   drivers: any;
   vehicles: any;
   hosLogs: any;
   vehicleLocations: any;
   dvirs: any;
   feedCursor: any;
-}): Wave1Golden {
-  const drivers = uniqueById(
-    (fixtures.drivers.data ?? []).map((driver: any) => {
+}): CanonicalSnapshot {
+  const drivers = uniqueById<CanonicalDriver>(
+    (fixtures.drivers.data ?? []).map((driver: any): CanonicalDriver => {
       const { firstName, lastName } = splitName(driver.name);
 
       return {
@@ -144,8 +142,8 @@ export function normalizeSamsaraWave1(fixtures: {
     }),
   );
 
-  const vehicles = uniqueById(
-    (fixtures.vehicles.data ?? []).map((vehicle: any) => ({
+  const vehicles = uniqueById<CanonicalVehicle>(
+    (fixtures.vehicles.data ?? []).map((vehicle: any): CanonicalVehicle => ({
       id: toId(vehicle.id),
       name: optionalString(vehicle.name),
       vin: optionalString(vehicle.vin),
@@ -153,8 +151,8 @@ export function normalizeSamsaraWave1(fixtures: {
     })),
   );
 
-  const hosEvents = sortById(
-    (fixtures.hosLogs.data ?? []).map((log: any) => ({
+  const hosEvents = sortById<CanonicalHosEvent>(
+    (fixtures.hosLogs.data ?? []).map((log: any): CanonicalHosEvent => ({
       id: toId(log.id),
       driverId: optionalString(log.driverId),
       vehicleId: optionalString(log.vehicleId),
@@ -167,24 +165,26 @@ export function normalizeSamsaraWave1(fixtures: {
     })),
   );
 
-  const gpsLocations = sortById(
-    (fixtures.vehicleLocations.data ?? []).map((location: any) => ({
-      id: toId(location.vehicleId),
-      vehicleId: optionalString(location.vehicleId),
-      driverId: null,
-      timestamp: optionalString(location.time),
-      latitude: optionalNumber(location.gps?.latitude),
-      longitude: optionalNumber(location.gps?.longitude),
-      speedKph:
-        typeof location.gps?.speedMilesPerHour === "number"
-          ? round(location.gps.speedMilesPerHour * MPH_TO_KPH)
-          : null,
-      headingDegrees: optionalNumber(location.gps?.headingDegrees),
-    })),
+  const gpsLocations = sortById<CanonicalGpsLocation>(
+    (fixtures.vehicleLocations.data ?? []).map(
+      (location: any): CanonicalGpsLocation => ({
+        id: toId(location.vehicleId),
+        vehicleId: optionalString(location.vehicleId),
+        driverId: null,
+        timestamp: optionalString(location.time),
+        latitude: optionalNumber(location.gps?.latitude),
+        longitude: optionalNumber(location.gps?.longitude),
+        speedKph:
+          typeof location.gps?.speedMilesPerHour === "number"
+            ? round(location.gps.speedMilesPerHour * MPH_TO_KPH)
+            : null,
+        headingDegrees: optionalNumber(location.gps?.headingDegrees),
+      }),
+    ),
   );
 
-  const dvirs = sortById(
-    (fixtures.dvirs.data ?? []).map((dvir: any) => ({
+  const dvirs = sortById<CanonicalDvir>(
+    (fixtures.dvirs.data ?? []).map((dvir: any): CanonicalDvir => ({
       id: toId(dvir.id),
       driverId: optionalString(dvir.driverId),
       vehicleId: optionalString(dvir.vehicleId),
@@ -216,13 +216,13 @@ export function normalizeSamsaraWave1(fixtures: {
   };
 }
 
-export function normalizeMotiveWave1(fixtures: {
+export function buildMotiveCanonicalSnapshot(fixtures: {
   drivers: any;
   vehicles: any;
   hosLogs: any;
   vehicleLocations: any;
   pageSync: any;
-}): Wave1Golden {
+}): CanonicalSnapshot {
   const canonicalDrivers: CanonicalDriver[] = [];
 
   for (const entry of fixtures.drivers.users ?? []) {
@@ -273,7 +273,7 @@ export function normalizeMotiveWave1(fixtures: {
     });
   }
 
-  const drivers = uniqueById(canonicalDrivers);
+  const drivers = uniqueById<CanonicalDriver>(canonicalDrivers);
 
   const canonicalVehicles: CanonicalVehicle[] = [];
 
@@ -321,11 +321,11 @@ export function normalizeMotiveWave1(fixtures: {
     });
   }
 
-  const vehicles = uniqueById(canonicalVehicles);
+  const vehicles = uniqueById<CanonicalVehicle>(canonicalVehicles);
 
-  const hosEvents = sortById(
+  const hosEvents = sortById<CanonicalHosEvent>(
     (fixtures.hosLogs.logs ?? []).flatMap((entry: any) =>
-      (entry.log?.events ?? []).map((eventEntry: any) => ({
+      (entry.log?.events ?? []).map((eventEntry: any): CanonicalHosEvent => ({
         id: toId(eventEntry.event.id),
         driverId: toId(entry.log.driver.id),
         vehicleId: toId(entry.log.vehicles?.[0]?.vehicle?.id ?? ""),
@@ -339,35 +339,39 @@ export function normalizeMotiveWave1(fixtures: {
     ),
   );
 
-  const gpsLocations = sortById(
-    (fixtures.vehicleLocations.vehicles ?? []).map((entry: any) => ({
-      id: toId(entry.vehicle.id),
-      vehicleId: toId(entry.vehicle.id),
-      driverId: toId(entry.vehicle.current_driver?.id ?? ""),
-      timestamp: optionalString(entry.vehicle.current_location?.located_at),
-      latitude: optionalNumber(entry.vehicle.current_location?.lat),
-      longitude: optionalNumber(entry.vehicle.current_location?.lon),
-      speedKph:
-        typeof entry.vehicle.current_location?.speed === "number"
-          ? round(entry.vehicle.current_location.speed * MPH_TO_KPH)
-          : null,
-      headingDegrees: optionalNumber(entry.vehicle.current_location?.bearing),
-    })),
+  const gpsLocations = sortById<CanonicalGpsLocation>(
+    (fixtures.vehicleLocations.vehicles ?? []).map(
+      (entry: any): CanonicalGpsLocation => ({
+        id: toId(entry.vehicle.id),
+        vehicleId: toId(entry.vehicle.id),
+        driverId: toId(entry.vehicle.current_driver?.id ?? ""),
+        timestamp: optionalString(entry.vehicle.current_location?.located_at),
+        latitude: optionalNumber(entry.vehicle.current_location?.lat),
+        longitude: optionalNumber(entry.vehicle.current_location?.lon),
+        speedKph:
+          typeof entry.vehicle.current_location?.speed === "number"
+            ? round(entry.vehicle.current_location.speed * MPH_TO_KPH)
+            : null,
+        headingDegrees: optionalNumber(entry.vehicle.current_location?.bearing),
+      }),
+    ),
   );
 
-  const dvirs = sortById(
+  const dvirs = sortById<CanonicalDvir>(
     (fixtures.hosLogs.logs ?? []).flatMap((entry: any) =>
-      (entry.log?.inspection_reports ?? []).map((reportEntry: any) => ({
-        id: toId(reportEntry.inspection_report.id),
-        driverId: toId(entry.log.driver.id),
-        vehicleId: toId(reportEntry.inspection_report.vehicle.id),
-        inspectionTime: optionalString(reportEntry.inspection_report.time),
-        isSafeToDrive:
-          typeof reportEntry.inspection_report.status === "string"
-            ? reportEntry.inspection_report.status !== "rejected"
-            : null,
-        defectCount: 0,
-      })),
+      (entry.log?.inspection_reports ?? []).map(
+        (reportEntry: any): CanonicalDvir => ({
+          id: toId(reportEntry.inspection_report.id),
+          driverId: toId(entry.log.driver.id),
+          vehicleId: toId(reportEntry.inspection_report.vehicle.id),
+          inspectionTime: optionalString(reportEntry.inspection_report.time),
+          isSafeToDrive:
+            typeof reportEntry.inspection_report.status === "string"
+              ? reportEntry.inspection_report.status !== "rejected"
+              : null,
+          defectCount: 0,
+        }),
+      ),
     ),
   );
 
@@ -391,16 +395,16 @@ export function normalizeMotiveWave1(fixtures: {
   };
 }
 
-export function normalizeGeotabWave1(fixtures: {
+export function buildGeotabCanonicalSnapshot(fixtures: {
   users: any;
   devices: any;
   dutyStatusLogs: any;
   driverRegulations: any;
   logRecords: any;
   getfeed: any;
-}): Wave1Golden {
-  const drivers = uniqueById(
-    (fixtures.users.result ?? []).map((user: any) => ({
+}): CanonicalSnapshot {
+  const drivers = uniqueById<CanonicalDriver>(
+    (fixtures.users.result ?? []).map((user: any): CanonicalDriver => ({
       id: toId(user.Id),
       firstName: optionalString(user.FirstName),
       lastName: optionalString(user.LastName),
@@ -412,8 +416,8 @@ export function normalizeGeotabWave1(fixtures: {
     })),
   );
 
-  const vehicles = uniqueById(
-    (fixtures.devices.result ?? []).map((device: any) => ({
+  const vehicles = uniqueById<CanonicalVehicle>(
+    (fixtures.devices.result ?? []).map((device: any): CanonicalVehicle => ({
       id: toId(device.Id),
       name: optionalString(device.Name),
       vin: optionalString(device.SerialNumber),
@@ -421,8 +425,8 @@ export function normalizeGeotabWave1(fixtures: {
     })),
   );
 
-  const hosEvents = sortById(
-    (fixtures.dutyStatusLogs.result ?? []).map((log: any) => ({
+  const hosEvents = sortById<CanonicalHosEvent>(
+    (fixtures.dutyStatusLogs.result ?? []).map((log: any): CanonicalHosEvent => ({
       id: toId(log.Id),
       driverId: toId(log.Driver?.Id ?? ""),
       vehicleId: toId(log.Device?.Id ?? ""),
@@ -435,17 +439,19 @@ export function normalizeGeotabWave1(fixtures: {
     })),
   );
 
-  const gpsLocations = sortById(
-    (fixtures.logRecords.result ?? []).map((record: any) => ({
-      id: toId(record.Id),
-      vehicleId: toId(record.Device?.Id ?? ""),
-      driverId: null,
-      timestamp: optionalString(record.DateTime),
-      latitude: optionalNumber(record.Latitude),
-      longitude: optionalNumber(record.Longitude),
-      speedKph: optionalNumber(record.Speed),
-      headingDegrees: null,
-    })),
+  const gpsLocations = sortById<CanonicalGpsLocation>(
+    (fixtures.logRecords.result ?? []).map(
+      (record: any): CanonicalGpsLocation => ({
+        id: toId(record.Id),
+        vehicleId: toId(record.Device?.Id ?? ""),
+        driverId: null,
+        timestamp: optionalString(record.DateTime),
+        latitude: optionalNumber(record.Latitude),
+        longitude: optionalNumber(record.Longitude),
+        speedKph: optionalNumber(record.Speed),
+        headingDegrees: null,
+      }),
+    ),
   );
 
   return {

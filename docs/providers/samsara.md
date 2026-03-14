@@ -3,8 +3,8 @@
 ## Summary
 
 - Regulatory scope: U.S. ELD / compliance capable
-- Target maturity: Wave 1
-- Current status: Doc-verified Wave 1 fixtures and contract tests committed
+- Target maturity: Planned
+- Current status: Doc-verified fixtures and contract tests committed
 
 ## Auth
 

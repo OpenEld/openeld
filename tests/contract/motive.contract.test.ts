@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 
-import { normalizeMotiveWave1 } from "../../src/wave1";
+import { buildMotiveCanonicalSnapshot } from "../../src/fixture-normalization";
 import { expectOfficialDocsMetadata, readJson } from "./support";
 
-describe("Motive Wave 1 fixtures", () => {
+describe("Motive canonical fixtures", () => {
   const driversMetadata = readJson<any>(
     "tests/fixtures/providers/motive/drivers/metadata.json",
   );
@@ -75,14 +75,14 @@ describe("Motive Wave 1 fixtures", () => {
   });
 
   test("canonical golden checks", () => {
-    const normalized = normalizeMotiveWave1({
+    const normalized = buildMotiveCanonicalSnapshot({
       drivers,
       vehicles,
       hosLogs,
       vehicleLocations,
       pageSync,
     });
-    const golden = readJson<any>("tests/fixtures/normalized/motive/wave1.json");
+    const golden = readJson<any>("tests/fixtures/normalized/motive/canonical.json");
 
     expect(normalized.sync.kind).toBe("page");
     expect(normalized.sync.token).toBe("1/25");

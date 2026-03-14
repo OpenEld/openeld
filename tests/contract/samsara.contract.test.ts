@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 
-import { normalizeSamsaraWave1 } from "../../src/wave1";
+import { buildSamsaraCanonicalSnapshot } from "../../src/fixture-normalization";
 import { expectOfficialDocsMetadata, readJson } from "./support";
 
-describe("Samsara Wave 1 fixtures", () => {
+describe("Samsara canonical fixtures", () => {
   const driversMetadata = readJson<any>(
     "tests/fixtures/providers/samsara/drivers/metadata.json",
   );
@@ -89,7 +89,7 @@ describe("Samsara Wave 1 fixtures", () => {
   });
 
   test("canonical golden checks", () => {
-    const normalized = normalizeSamsaraWave1({
+    const normalized = buildSamsaraCanonicalSnapshot({
       drivers,
       vehicles,
       hosLogs,
@@ -97,7 +97,7 @@ describe("Samsara Wave 1 fixtures", () => {
       dvirs,
       feedCursor,
     });
-    const golden = readJson<any>("tests/fixtures/normalized/samsara/wave1.json");
+    const golden = readJson<any>("tests/fixtures/normalized/samsara/canonical.json");
 
     expect(normalized.sync.kind).toBe("cursor");
     expect(normalized.sync.token).toBe("cursor-123");

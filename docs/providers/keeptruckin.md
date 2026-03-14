@@ -3,7 +3,7 @@
 ## Summary
 
 - Regulatory scope: Legacy compatibility for the Motive lineage
-- Target maturity: Wave 1 compatibility path
+- Target maturity: Legacy compatibility path
 - Current status: Planned
 
 ## Auth
