@@ -1,5 +1,5 @@
 {
-  "name": "openeld",
+  "name": "@openeld/openeld",
   "version": "0.1.0",
   "description": "Universal protobuf-first data interface for logistics ELD and telematics integrations.",
   "type": "module",
@@ -27,5 +27,8 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "tsup": "^8.5.1"
   }
 }
