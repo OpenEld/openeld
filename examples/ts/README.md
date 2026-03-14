@@ -1,16 +1,35 @@
 # TypeScript Examples
 
-The package exports both the runtime normalization service and the generated protobuf schemas.
-
-Example shape:
+The default experience should start with the OO SDK:
 
 ```ts
-import { create } from "@bufbuild/protobuf";
+import { createOpenEldClient } from "@openeld/openeld";
+
+const client = createOpenEldClient();
+
+const result = await client.providers.samsara.normalize({
+  drivers,
+  vehicles,
+  hosLogs,
+  hosClocks,
+  vehicleLocations,
+  dvirs,
+  feedCursor,
+});
+
+console.log(result.response.drivers);
+console.log(result.warnings);
+```
+
+If you want to stay close to generated protobuf contracts, use the normalization namespace:
+
+```ts
 import {
-  NormalizeProviderPayloadRequestSchema,
+  createOpenEldClient,
   buildSamsaraPayload,
-  normalizeProviderPayload,
 } from "@openeld/openeld";
+
+const client = createOpenEldClient();
 
 const samsaraPayload = buildSamsaraPayload({
   drivers,
@@ -22,14 +41,8 @@ const samsaraPayload = buildSamsaraPayload({
   feedCursor,
 });
 
-const request = create(NormalizeProviderPayloadRequestSchema, {
-  providerPayload: {
-    case: "samsara",
-    value: samsaraPayload,
-  },
-});
-
-const response = normalizeProviderPayload(request);
+const request = client.normalization.toRequest("samsara", samsaraPayload);
+const response = await client.normalization.normalize(request);
 ```
 
-Consumers should treat the generated protobuf messages as the only structural types and keep handwritten TypeScript focused on behavior, orchestration, and IO.
+For `query` and `sync`, the SDK already exposes OO namespaces that match the protobuf contracts, but those methods require a configured transport invoker because local query/sync runtime behavior is not implemented yet.

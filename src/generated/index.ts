@@ -14,3 +14,5 @@ export * from "../../gen/ts/providers/eld/motive/contracts_pb";
 export * from "../../gen/ts/providers/eld/samsara/contracts_pb";
 export * from "../../gen/ts/providers/eld/shared/common_pb";
 export * from "../../gen/ts/services/normalization/service_pb";
+export * from "../../gen/ts/services/query/service_pb";
+export * from "../../gen/ts/services/sync/service_pb";

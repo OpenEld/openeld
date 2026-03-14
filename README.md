@@ -37,17 +37,48 @@ The default Buf generation template produces:
 The npm package is built from `src/index.ts` into `dist/` before publishing.
 
 - `bun run build` emits the ESM bundle and `.d.ts` types
-- `src/index.ts` re-exports the runtime normalization service and selected generated protobuf bindings
+- `src/index.ts` now favors the OO SDK entrypoint while still exposing generated protobuf bindings for advanced use
+- `@openeld/openeld/client` and `@openeld/openeld/generated` resolve to the same published bundle, but provide clearer intent for consumers
 - `gen/ts` ships alongside `dist/` so generated schemas remain part of the package contract
 - `npm pack --dry-run` validates the published package contents locally
 
 ## Runtime Usage
 
-The TypeScript runtime is now protobuf-first end to end:
+The default TypeScript experience is now an OO SDK on top of the protobuf-first runtime:
 
-- build provider payload messages with the generated schemas or the fixture-loading helpers
-- pass a generated `NormalizeProviderPayloadRequest` to `normalizeProviderPayload()`
-- consume the generated `NormalizeProviderPayloadResponse` or serialize it with the protobuf runtime
+```ts
+import { createOpenEldClient } from "@openeld/openeld";
+
+const client = createOpenEldClient();
+
+const result = await client.providers.samsara.normalize({
+  drivers,
+  vehicles,
+  hosLogs,
+  hosClocks,
+  vehicleLocations,
+  dvirs,
+  feedCursor,
+});
+
+console.log(result.response.drivers);
+console.log(result.warnings);
+```
+
+Advanced users can still stay close to protobuf contracts:
+
+- use `client.normalization.toRequest(provider, payload, options)` to build generated normalization requests
+- call `client.normalization.normalize()` or `client.normalization.normalizeSync()` with protobuf-generated requests
+- access generated bindings from the root package or through `client.schemas`
+
+## SDK Scope Today
+
+The SDK is intentionally honest about what is implemented locally today:
+
+- `client.providers.samsara`, `client.providers.motive`, and `client.providers.geotab` provide local payload building and normalization
+- `client.normalization` works locally without any transport configuration
+- `client.query` and `client.sync` are transport-ready facades aligned with the protobuf contracts and require an injected invoker
+- generated request and response types remain the source of truth for all integration boundaries
 
 ## Versioning
 

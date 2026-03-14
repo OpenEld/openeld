@@ -30,6 +30,14 @@ export class ProviderRegistry {
     return this.#adapters.get(provider);
   }
 
+  has(provider: ProviderPayloadCase) {
+    return this.#adapters.has(provider);
+  }
+
+  list() {
+    return [...this.#adapters.keys()];
+  }
+
   normalize(request: NormalizeProviderPayloadRequest) {
     if (!request.providerPayload.case) {
       return create(NormalizeProviderPayloadResponseSchema, {
