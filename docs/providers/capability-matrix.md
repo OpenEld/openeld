@@ -1,5 +1,7 @@
 # Provider Capability Matrix
 
+This matrix is internal reference material for maintainers. For consumer-facing support guidance, start with [`README.md`](README.md).
+
 | Provider | Auth | Sync Model | Rate Limits | Driver | Vehicle | HOS Events | HOS Clocks | GPS | DVIR | Safety | IFTA | Assets | Maturity | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Samsara | Bearer token | Feed + webhook + cursor | Documented | Planned | Planned | Planned | Planned | Planned | Planned | Planned | Unknown | Unknown | Planned | Priority direct provider |

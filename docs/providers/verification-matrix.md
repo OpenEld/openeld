@@ -1,5 +1,7 @@
 # Provider Verification Matrix
 
+This matrix is internal reference material for maintainers. For consumer-facing support guidance, start with [`README.md`](README.md).
+
 | Provider | Fixture Source | Last Verified | Auth Tested | Sync Tested | Driver | Vehicle | HOS Events | HOS Clocks | GPS | DVIR | Safety | IFTA | Assets | Inferred Mappings Remaining | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Samsara | Official docs examples and sync docs | 2026-03-14 | No | Yes | Yes | Yes | Yes | Yes | Yes | Yes | No | No | No | Yes | Doc-verified fixtures |

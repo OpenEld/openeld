@@ -1,5 +1,7 @@
 # Provider Template
 
+This template is internal reference material for contributors adding or revising provider support. Consumers should use the provider pages in [`README.md`](README.md) instead.
+
 ## Provider Summary
 
 - Provider:

@@ -1,37 +1,69 @@
 # Geotab
 
-## Summary
+## Status
 
-- Regulatory scope: U.S. ELD / compliance capable
-- Target maturity: Planned
-- Current status: Doc-verified fixtures and contract tests committed
+- Runtime support: local normalization available
+- Fixture quality: contract and normalization coverage is committed, with some fixtures derived from official schemas and object docs
+- Best fit: teams normalizing Geotab users, devices, duty status, regulation, and feed/version-token workflows
 
-## Auth
+## What Input The SDK Expects
 
-- Session-style authenticate flow
+The local SDK path is designed around Geotab-native record groups such as:
 
-## Sync Model
+- `users`
+- `devices`
+- `dutyStatusLogs`
+- `driverRegulations`
+- `logRecords`
+- `getFeed`
 
-- `GetFeed` and `fromVersion` style incremental sync
-- Best fit checkpoint types: version token and watermark
+Typical usage:
 
-## Supported Domains To Target
+```ts
+import { createOpenEldClient } from "@openeld/openeld";
 
-- Driver
-- Vehicle
-- HOS events
-- HOS clocks / driver regulation
-- GPS
+const client = createOpenEldClient();
 
-## Known Mapping Notes
+const result = await client.providers.geotab.normalize({
+  users,
+  devices,
+  dutyStatusLogs,
+  driverRegulations,
+  logRecords,
+  getFeed,
+});
+```
 
-- HOS data centers on `DutyStatusLog` and related types
-- event semantics are richer and more system-oriented than some other providers
+## What Is Strong Today
+
+Current local normalization is strongest for:
+
+- user-to-driver mapping
+- device-to-vehicle mapping
+- duty status and HOS-related records
+- version-token sync context
+
+Geotab exposes rich system-oriented event semantics, so the canonical model is often a carefully normalized view over a more complex native structure.
+
+## Sync Model Summary
+
+Geotab is modeled around `GetFeed` and `fromVersion` style incremental sync.
+
+Important notes:
+
+- version tokens are the primary checkpoint concept
+- watermarks can complement version-based progress tracking
+- transport-backed `client.sync` still requires your own configured invoker
+
+## Caveats And Warnings
+
+- HOS flows center on `DutyStatusLog` and related native objects
+- event semantics are richer and more system-oriented than in some other providers
 - license number availability may depend on custom fields or account configuration
-- initial committed fixtures are schema-derived from official object and method docs because public static payload examples are limited
+- current fixtures are useful and high-signal, but some are schema-derived because public static payload examples are limited
+- the strongest next validation step is replacing schema-derived fixtures with recorded sandbox or live-tenant `Get` and `GetFeed` payloads
 
-## Verification Priority
+## Related Docs
 
-- committed fixtures: `users`, `devices`, `duty-status-logs`, `driver-regulations`, `log-records`, `getfeed`
-- test coverage: fixture provenance, provider contract shape, canonical golden normalization, version-token sync semantics
-- remaining upgrade path: replace schema-derived fixtures with recorded `Get` and `GetFeed` payloads from a sandbox or live tenant
+- [Normalization Guide](../guides/normalization.md)
+- [Schema And Generated Bindings](../concepts/schema-and-generated-bindings.md)

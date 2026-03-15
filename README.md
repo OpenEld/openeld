@@ -1,50 +1,27 @@
 # openeld
 
-`openeld` is a protobuf-first package for a universal logistics data interface across ELD and telematics providers.
+`@openeld/openeld` is a protobuf-first SDK for normalizing ELD and telematics data into a shared logistics model.
 
-## Repository Shape
+It is designed for teams that want:
 
-- `proto/` contains the canonical message and service definitions.
-- `src/` contains behavior-only runtime modules that consume generated protobuf types.
-- `gen/` is reserved for generated language bindings.
-- `buf/` contains protobuf linting and generation configuration.
-- `docs/`, `examples/`, and `tests/fixtures/` support schema evolution and provider onboarding.
+- one canonical schema across providers
+- a pleasant TypeScript SDK for day-to-day integration work
+- generated protobuf bindings as the source of truth for runtime types
+- a path toward transport-backed query and sync APIs without changing the package shape later
 
-## Source Of Truth
+## Install
 
-All shared types are intended to be defined in Protocol Buffers so TypeScript and Python bindings can be generated from the same contracts.
+```sh
+npm install @openeld/openeld
+```
 
-## Current Schema Coverage
+```sh
+bun add @openeld/openeld
+```
 
-The `v1` schema currently includes:
+## Quickstart
 
-- common primitives for IDs, dates, time ranges, locations, measurements, source metadata, and audit metadata
-- normalized logistics entities for carriers, drivers, vehicles, vehicle assignments, HOS events, HOS daily summaries, GPS locations, DVIRs, data consents, safety events, IFTA trips, assets, and asset locations
-- provider payload contracts for Samsara, Motive, Geotab, KeepTruckin, Project44, FourKites, Verizon Connect, and Fleet Complete
-- service definitions for ingestion, normalization, query, and sync workflows
-
-The aggregate import surface is `proto/v1/openeld.proto`.
-
-## Generation
-
-The default Buf generation template produces:
-
-- TypeScript output in `gen/ts`
-- Python output in `gen/py`
-
-## Packaging
-
-The npm package is built from `src/index.ts` into `dist/` before publishing.
-
-- `bun run build` emits the ESM bundle and `.d.ts` types
-- `src/index.ts` now favors the OO SDK entrypoint while still exposing generated protobuf bindings for advanced use
-- `@openeld/openeld/client` and `@openeld/openeld/generated` resolve to the same published bundle, but provide clearer intent for consumers
-- `gen/ts` ships alongside `dist/` so generated schemas remain part of the package contract
-- `npm pack --dry-run` validates the published package contents locally
-
-## Runtime Usage
-
-The default TypeScript experience is now an OO SDK on top of the protobuf-first runtime:
+The fastest way to get value from OpenELD today is local provider normalization through the OO SDK:
 
 ```ts
 import { createOpenEldClient } from "@openeld/openeld";
@@ -62,45 +39,144 @@ const result = await client.providers.samsara.normalize({
 });
 
 console.log(result.response.drivers);
+console.log(result.response.vehicles);
 console.log(result.warnings);
 ```
 
-Advanced users can still stay close to protobuf contracts:
+The provider method returns:
 
-- use `client.normalization.toRequest(provider, payload, options)` to build generated normalization requests
-- call `client.normalization.normalize()` or `client.normalization.normalizeSync()` with protobuf-generated requests
-- access generated bindings from the root package or through `client.schemas`
+- `payload`: the generated provider payload message
+- `request`: the generated normalization request
+- `response`: the generated canonical normalization response
+- `warnings`: provider-specific caveats and staging notes
+
+## Choose Your Path
+
+### Recommended: OO SDK
+
+Use `createOpenEldClient()` when you want the cleanest consumer experience.
+
+- `client.providers.samsara.normalize(...)`
+- `client.providers.motive.normalize(...)`
+- `client.providers.geotab.normalize(...)`
+- `client.providers.supported()`
+
+### Advanced: Protobuf-First Normalization
+
+Use the normalization namespace when you want to stay closer to generated request and response types:
+
+```ts
+import {
+  createOpenEldClient,
+  buildSamsaraPayload,
+} from "@openeld/openeld";
+
+const client = createOpenEldClient();
+const payload = buildSamsaraPayload({
+  drivers,
+  vehicles,
+  hosLogs,
+  hosClocks,
+  vehicleLocations,
+  dvirs,
+  feedCursor,
+});
+
+const request = client.normalization.toRequest("samsara", payload, {
+  tenantId: "tenant-123",
+});
+
+const response = await client.normalization.normalize(request);
+```
+
+### Staged: Query And Sync
+
+`client.query` and `client.sync` already match the intended protobuf service boundaries, but they require a configured transport invoker.
+
+They are useful when you are:
+
+- calling a remote service that implements the protobuf contracts
+- standardizing your own transport layer around OpenELD request and response types
+
+They are not local in-process data stores or built-in hosted APIs.
 
 ## SDK Scope Today
 
-The SDK is intentionally honest about what is implemented locally today:
+What works locally right now:
 
-- `client.providers.samsara`, `client.providers.motive`, and `client.providers.geotab` provide local payload building and normalization
-- `client.normalization` works locally without any transport configuration
-- `client.query` and `client.sync` are transport-ready facades aligned with the protobuf contracts and require an injected invoker
-- generated request and response types remain the source of truth for all integration boundaries
+- provider payload building and normalization for `samsara`, `motive`, and `geotab`
+- advanced in-process normalization through `client.normalization`
+- generated protobuf bindings through the root package, `client.schemas`, and `@openeld/openeld/generated`
 
-## Versioning
+What is transport-ready but not locally implemented:
 
-This repository uses Changesets for semver, changelog entries, and release tagging.
+- `client.query.*`
+- `client.sync.*`
+
+## Supported Providers
+
+Current consumer-ready local normalization support:
+
+- Samsara
+- Motive
+- Geotab
+
+Limited or staged provider support:
+
+- KeepTruckin is documented as a legacy compatibility path
+- additional provider contracts exist in the protobuf surface, but not all are wired into the local runtime yet
+
+See the provider guides in [`docs/providers/README.md`](docs/providers/README.md).
+
+## Documentation
+
+Start here:
+
+- [Documentation Home](docs/README.md)
+- [Quickstart](docs/getting-started/quickstart.md)
+- [Normalization Guide](docs/guides/normalization.md)
+- [Transport And Remote Services](docs/guides/transports-and-remote-services.md)
+- [Query And Sync Guide](docs/guides/query-and-sync.md)
+- [Schema And Generated Bindings](docs/concepts/schema-and-generated-bindings.md)
+- [Provider Guides](docs/providers/README.md)
+
+## Source Of Truth
+
+`proto/` is the only source of structural types.
+
+That means:
+
+- canonical logistics entities are defined in protobuf
+- provider-native payload contracts are defined in protobuf
+- generated TypeScript bindings in `gen/ts` are the runtime type surface
+- handwritten TypeScript in `src/` focuses on behavior, orchestration, and transport boundaries
+
+The aggregate import surface is `proto/v1/openeld.proto`.
+
+## Package Layout
+
+- `src/` contains the SDK, runtime services, adapters, and client facades
+- `proto/` contains canonical and provider-native protobuf definitions
+- `gen/ts` contains generated TypeScript bindings that ship with the package
+- `docs/` contains consumer and contributor documentation
+- `examples/` contains focused usage examples
+
+## Packaging
+
+- `bun run build` emits the ESM bundle and `.d.ts` types
+- `@openeld/openeld/client` and `@openeld/openeld/generated` provide clearer import intent while resolving to the published bundle
+- `npm pack --dry-run` validates publish contents locally
+
+## Versioning And Release
+
+This repository uses Changesets for semantic versioning, changelog entries, and release tagging.
 
 - run `bun run changeset` when a change should affect the published package version
 - commit the generated file under `.changeset/`
 - merge to `main` to let the release workflow open or update the version PR
 - merging the version PR publishes to npm and creates the corresponding release tag
 
-## Release Automation
+GitHub Actions handles validation and release automation:
 
-GitHub Actions handles validation and npm publishing:
-
-- `.github/workflows/ci.yml` runs install, build, tests, and `npm pack --dry-run`
-- `.github/workflows/publish.yml` uses Changesets on `main` to open version PRs and publish/tag releases after merge
-
-For npm publishing, configure npm trusted publishing for this repository and workflow, or update the workflow if you prefer token-based publishing.
-
-## Next Steps
-
-- Refine provider-native record coverage as more provider field mappings are confirmed.
-- Widen normalization outputs for consent, safety, IFTA, and asset tracking once provider mappings for those domains are mature.
-- Add validation and contract tests around the `v1` schema.
-- Decide whether query and sync service APIs should remain generic or split further by domain area.
+- `.github/workflows/ci.yml` runs build, tests, and package validation
+- `.github/workflows/publish.yml` opens version PRs and publishes tagged releases through Changesets

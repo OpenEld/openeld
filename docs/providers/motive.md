@@ -1,36 +1,67 @@
 # Motive
 
-## Summary
+## Status
 
-- Regulatory scope: U.S. ELD / compliance capable
-- Target maturity: Planned
-- Current status: Doc-verified fixtures and contract tests committed
+- Runtime support: local normalization available
+- Fixture quality: doc-verified fixtures and contract tests are committed
+- Best fit: teams normalizing Motive driver, vehicle, HOS, GPS, and documented page-sync inputs
 
-## Auth
+## What Input The SDK Expects
 
-- API key or OAuth 2.0 depending on account/application path
+The local SDK path is centered on Motive-native record groups such as:
 
-## Sync Model
+- `drivers`
+- `vehicles`
+- `hosLogs`
+- `vehicleLocations`
+- `pageSync`
 
-- Page-based polling is the documented sync model
-- Best fit checkpoint types: page token or page counter plus watermark
+Typical usage:
 
-## Supported Domains To Target
+```ts
+import { createOpenEldClient } from "@openeld/openeld";
 
-- Driver
-- Vehicle
+const client = createOpenEldClient();
+
+const result = await client.providers.motive.normalize({
+  drivers,
+  vehicles,
+  hosLogs,
+  vehicleLocations,
+  pageSync,
+});
+```
+
+## What Is Strong Today
+
+Current local normalization is strongest for:
+
+- driver records
+- vehicle records
 - HOS events
-- GPS
-- DVIR where available
+- GPS location records
+- page-based sync context
 
-## Known Mapping Notes
+DVIR handling depends more heavily on what the provider exposes for the account and captured fixtures.
 
-- odometer may require miles-to-meters conversion
+## Sync Model Summary
+
+Motive is modeled around page-based polling.
+
+Important notes:
+
+- checkpoint handling typically fits a page token or page counter plus watermark
+- transport-backed `client.sync` still requires your own configured invoker
+- local normalization can include sync context, but it does not replace a full remote sync service
+
+## Caveats And Warnings
+
+- odometer values may require miles-to-meters conversion
 - engine hours may require hours-to-seconds conversion
-- logs use native `status`, `annotation`, and coordinate fields
+- log records use native `status`, `annotation`, and coordinate fields that may need careful interpretation downstream
+- current fixture quality is good for documented examples, but unit-conversion assumptions should still be validated against sandbox or sanitized production captures
 
-## Verification Priority
+## Related Docs
 
-- committed fixtures: `drivers`, `vehicles`, `hos-logs`, `vehicle-locations`, `page-sync`
-- test coverage: fixture provenance, provider contract shape, canonical golden normalization, page-based sync semantics
-- remaining upgrade path: validate unit conversion assumptions against sandbox or production captures
+- [Normalization Guide](../guides/normalization.md)
+- [Query And Sync](../guides/query-and-sync.md)

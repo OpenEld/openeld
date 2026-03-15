@@ -1,38 +1,70 @@
 # Samsara
 
-## Summary
+## Status
 
-- Regulatory scope: U.S. ELD / compliance capable
-- Target maturity: Planned
-- Current status: Doc-verified fixtures and contract tests committed
+- Runtime support: local normalization available
+- Fixture quality: doc-verified fixtures and contract tests are committed
+- Best fit: teams normalizing Samsara drivers, vehicles, HOS, GPS, DVIR, and feed cursor data into the canonical model
 
-## Auth
+## What Input The SDK Expects
 
-- Bearer API token
+The local SDK path is designed around Samsara-native record groups such as:
 
-## Sync Model
+- `drivers`
+- `vehicles`
+- `hosLogs`
+- `hosClocks`
+- `vehicleLocations`
+- `dvirs`
+- `feedCursor`
 
-- Feed endpoints with cursor semantics
-- Webhook support is available
-- Best fit checkpoint types: cursor and time watermark
+Typical usage:
 
-## Supported Domains To Target
+```ts
+import { createOpenEldClient } from "@openeld/openeld";
 
-- Driver
-- Vehicle
-- HOS events
-- HOS clocks
-- GPS
-- DVIR
+const client = createOpenEldClient();
 
-## Known Mapping Notes
+const result = await client.providers.samsara.normalize({
+  drivers,
+  vehicles,
+  hosLogs,
+  hosClocks,
+  vehicleLocations,
+  dvirs,
+  feedCursor,
+});
+```
 
-- `driver.name` may need splitting into first and last name
-- speed may be reported in mph and should normalize to km/h
-- HOS logs expose native `hosStatusType`, `origin`, `remark`, and location details
+## What Is Strong Today
 
-## Verification Priority
+Current local normalization is strongest for:
 
-- committed fixtures: `drivers`, `vehicles`, `hos-logs`, `hos-clocks`, `vehicle-locations`, `dvirs`, `feed-cursor`
-- test coverage: fixture provenance, provider contract shape, canonical golden normalization, cursor sync semantics
-- remaining upgrade path: replace doc-derived fixture set with sandbox or production captures when credentials are available
+- driver records
+- vehicle records
+- HOS event and clock workflows
+- GPS location records
+- DVIR records
+- cursor-based feed sync context
+
+## Sync Model Summary
+
+Samsara is modeled around feed endpoints with cursor semantics.
+
+Important notes:
+
+- cursor checkpoints map well to incremental sync behavior
+- webhook support exists on the provider side, but OpenELD does not turn that into a hosted sync product
+- transport-backed `client.sync` still requires your own configured invoker
+
+## Caveats And Warnings
+
+- `driver.name` may need splitting into first and last name depending on your downstream canonical needs
+- speed values may arrive in mph and normalize into canonical units
+- HOS logs carry provider-native semantics such as `hosStatusType`, `origin`, `remark`, and detailed location context that may not map one-to-one into simplified consumer views
+- current fixture coverage is strong, but the next quality step is replacing doc-derived inputs with sandbox or sanitized production captures
+
+## Related Docs
+
+- [Normalization Guide](../guides/normalization.md)
+- [Transport And Remote Services](../guides/transports-and-remote-services.md)

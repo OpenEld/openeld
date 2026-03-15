@@ -1,73 +1,54 @@
-# Provider Notes
+# Provider Index
 
-This directory is the source of truth for onboarding and maintaining direct U.S. ELD providers.
+Use this directory to understand what OpenELD supports for each provider today.
 
-## Required Documents
+The provider pages are written from a consumer point of view first:
 
-Every provider should have:
+- what input the SDK expects
+- what local normalization is currently strong at
+- how sync/checkpoint behavior is modeled
+- where caveats or inferred mappings still exist
 
-- a provider note file describing auth, sync, supported domains, and quirks
-- an entry in the capability matrix
-- an entry in the verification matrix
-- a fixture source record tied to authoritative API examples
+## Current Runtime Support
 
-## Provider Onboarding Playbook
+### Local normalization available now
 
-For each provider, complete the same sequence:
+- [Samsara](samsara.md)
+- [Motive](motive.md)
+- [Geotab](geotab.md)
 
-1. Confirm provider relevance.
-   Accept only providers that materially help U.S. FMCSA fleet coverage and expose enough API surface to justify direct support.
-2. Capture authoritative API truth.
-   Collect official docs, sandbox responses, or sanitized production payloads for the provider's key endpoints.
-3. Define provider-native protobuf contracts.
-   Represent native records faithfully before mapping them into the canonical logistics schema.
-4. Write failing high-signal tests first.
-   Start with provider contract tests, canonical normalization snapshot tests, and sync-state tests.
-5. Implement normalization and sync logic.
-   Convert provider-native payloads to canonical protobuf messages and model the provider's real checkpoint behavior.
-6. Document fidelity and gaps.
-   Record unsupported fields, inferred mappings, rate limits, auth caveats, and known differences from the canonical model.
-7. Promote maturity deliberately.
-   Move from `planned` to `experimental`, `beta`, and `production` only when the verification matrix supports it.
+### Limited or staged support
 
-## High-Signal Fixture Policy
+- [KeepTruckin](keeptruckin.md)
 
-Fixture sources are ranked in this order:
+KeepTruckin should be treated as a legacy compatibility path rather than a recommended new integration target.
 
-1. official provider examples or schemas
-2. sandbox responses
-3. sanitized production captures
-4. hand-crafted inferred fixtures only when clearly marked and scheduled for replacement
+## How To Read Status
 
-Every fixture set should carry metadata for:
+OpenELD uses support language conservatively:
 
-- source URL or endpoint
-- provider API version or doc version
-- capture date
-- auth context
-- sanitization notes
-- supported domains covered by the fixture
+- `local normalization available` means the SDK has a wired provider namespace today
+- `limited or staged support` means the protobuf surface or documentation exists, but local runtime behavior is incomplete or intentionally narrow
+- provider docs call out when fixtures are doc-verified, schema-derived, or still need stronger sandbox or production captures
 
-## Quality Gates
+## Best Starting Point
 
-A provider is not production-ready until:
+If you are deciding how to integrate:
 
-- provider-native protobuf contracts exist
-- authoritative fixtures exist for the supported domains
-- contract tests pass against those fixtures
-- normalization golden tests pass for those fixtures
-- sync behavior tests cover the provider's real pagination/checkpoint model
-- unsupported or degraded fields are explicitly documented
+1. Check whether your provider has local normalization today.
+2. Read the provider-specific input expectations and caveats.
+3. Confirm whether your workflow needs local normalization only or a transport-backed sync service later.
 
-## Matrix Files
+## Related Docs
 
-- `capability-matrix.md` tracks what each provider supports and how it behaves operationally
-- `verification-matrix.md` tracks how well each provider has been proven against real API truth
-- `provider-template.md` is the template for adding new provider notes
+- [Quickstart](../getting-started/quickstart.md)
+- [Normalization Guide](../guides/normalization.md)
+- [Transport And Remote Services](../guides/transports-and-remote-services.md)
 
-## Current Provider Notes
+## Internal Reference
 
-- `samsara.md`
-- `motive.md`
-- `geotab.md`
-- `keeptruckin.md`
+These pages remain useful for contributors and maintainers:
+
+- [Capability Matrix](capability-matrix.md)
+- [Verification Matrix](verification-matrix.md)
+- [Provider Template](provider-template.md)

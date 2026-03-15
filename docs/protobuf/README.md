@@ -1,14 +1,18 @@
 # Protobuf Notes
 
+This page is internal reference material for contributors and maintainers.
+
+If you are using the package as an SDK consumer, read [`../concepts/schema-and-generated-bindings.md`](../concepts/schema-and-generated-bindings.md) first.
+
 `proto/` is the source of truth for the package.
 
 ## Package Layout
 
-- `common/` contains reusable primitives, units, source metadata, and audit metadata.
-- `logistics/` contains the normalized canonical model for carriers, drivers, vehicles, assignments, HOS, GPS, DVIR, consent, safety, IFTA, and assets.
-- `providers/` contains provider-native payload contracts grouped by ELD and telematics source.
-- `services/` contains RPC-ready ingestion, normalization, query, and sync APIs.
-- `v1/openeld.proto` is the aggregate import surface for the current schema version.
+- `common/` contains reusable primitives, units, source metadata, and audit metadata
+- `logistics/` contains the normalized canonical model for carriers, drivers, vehicles, assignments, HOS, GPS, DVIR, consent, safety, IFTA, and assets
+- `providers/` contains provider-native payload contracts grouped by ELD and telematics source
+- `services/` contains RPC-ready ingestion, normalization, query, and sync APIs
+- `v1/openeld.proto` is the aggregate import surface for the current schema version
 
 ## Generation
 
@@ -20,9 +24,9 @@
 
 ## Design Rules
 
-- All identifiers are modeled as strings for cross-language ergonomics.
-- Provider payloads stay separate from normalized logistics messages.
-- Source metadata is attached to records for traceability back to native provider payloads.
-- Distances, speed, engine hours, timestamps, and coordinates use normalized units defined in the schema.
-- Consent, safety, IFTA, and asset tracking are part of the canonical `v1` model.
-- The new Catena-inspired domains are currently exposed through the canonical schema and query APIs without widening provider normalization responses yet.
+- all identifiers are modeled as strings for cross-language ergonomics
+- provider payloads stay separate from normalized logistics messages
+- source metadata is attached to records for traceability back to native provider payloads
+- distances, speed, engine hours, timestamps, and coordinates use normalized units defined in the schema
+- consent, safety, IFTA, and asset tracking are part of the canonical `v1` model
+- Catena-inspired domains are exposed through the canonical schema and query APIs without implying broad local provider runtime coverage
