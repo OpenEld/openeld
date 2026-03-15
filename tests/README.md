@@ -9,6 +9,13 @@
 
 This package uses high-signal TDD for provider onboarding and normalization work.
 
+Coverage is enforced with Bun's native coverage runner and should be treated as a floor, not a goal.
+
+- run `bun run test:coverage:check` to enforce the coverage minimums
+- run `bun run test:coverage` to generate text and lcov coverage reports
+- coverage ignores generated artifacts so the thresholds apply to hand-written runtime code
+- thresholds should be raised over time as unsupported branches and transport facades gain real tests
+
 ## High-Signal Rules
 
 - prefer tests built from authoritative provider payloads over synthetic payloads

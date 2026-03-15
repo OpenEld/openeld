@@ -1,0 +1,11 @@
+[test]
+coverageSkipTestFiles = true
+coverageThreshold = { lines = 0.85, functions = 0.85 }
+coveragePathIgnorePatterns = [
+  "gen/**",
+  "dist/**",
+  "tests/**",
+  "coverage/**",
+  "**/*.d.ts",
+  "src/generated/**"
+]
