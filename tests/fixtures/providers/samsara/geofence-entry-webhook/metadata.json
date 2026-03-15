@@ -1,0 +1,11 @@
+{
+  "provider": "samsara",
+  "endpoint": "webhooks/geofence-entry",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.samsara.com/docs/geofenceentry",
+  "captureDate": "2026-03-14",
+  "apiVersion": "webhooks-2.0-beta",
+  "authContext": "public-docs",
+  "sanitizationNotes": "Copied from the official Samsara GeofenceEntry webhook payload example.",
+  "notes": "Official Beta webhook example for a geofence entry transition."
+}

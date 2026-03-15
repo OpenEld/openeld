@@ -23,7 +23,7 @@ export function expectOfficialDocsMetadata(metadata: {
 
 export function serializeMessage<T extends Message>(
   schema: GenMessage<T>,
-  message: T,
+  message: T
 ) {
   return toJson(schema, message);
 }

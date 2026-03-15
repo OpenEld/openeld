@@ -9,6 +9,7 @@ import "logistics/carrier.proto";
 import "logistics/data_consent.proto";
 import "logistics/driver.proto";
 import "logistics/dvir.proto";
+import "logistics/geofence_event.proto";
 import "logistics/gps_location.proto";
 import "logistics/hos_daily_summary.proto";
 import "logistics/hos_event.proto";
@@ -206,6 +207,21 @@ message ListAssetLocationsResponse {
   optional CursorPageResponse page = 2;
 }
 
+message ListGeofenceEventsRequest {
+  optional string geofence_id = 1;
+  optional string asset_id = 2;
+  optional string vehicle_id = 3;
+  optional string driver_id = 4;
+  optional EntityScope scope = 5;
+  optional TimeRangeFilter time_range = 6;
+  optional CursorPageRequest page = 7;
+}
+
+message ListGeofenceEventsResponse {
+  repeated openeld.logistics.v1.GeofenceEvent geofence_events = 1;
+  optional CursorPageResponse page = 2;
+}
+
 message ListDvirsRequest {
   optional string vehicle_id = 1;
   optional string driver_id = 2;
@@ -234,5 +250,6 @@ service QueryService {
   rpc GetAsset(GetAssetRequest) returns (GetAssetResponse);
   rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
   rpc ListAssetLocations(ListAssetLocationsRequest) returns (ListAssetLocationsResponse);
+  rpc ListGeofenceEvents(ListGeofenceEventsRequest) returns (ListGeofenceEventsResponse);
   rpc ListDvirs(ListDvirsRequest) returns (ListDvirsResponse);
 }

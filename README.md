@@ -105,6 +105,7 @@ They are not local in-process data stores or built-in hosted APIs.
 What works locally right now:
 
 - provider payload building and normalization for `samsara`, `motive`, and `geotab`
+- Samsara payloads can carry raw geofence entry and exit webhook events that project into canonical `geofenceEvents`
 - advanced in-process normalization through `client.normalization`
 - generated protobuf bindings through the root package, `client.schemas`, and `@openeld/openeld/generated`
 

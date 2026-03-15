@@ -1,6 +1,6 @@
 {
   "name": "@openeld/openeld",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Universal protobuf-first data interface for logistics ELD and telematics integrations.",
   "type": "module",
   "main": "./dist/index.js",

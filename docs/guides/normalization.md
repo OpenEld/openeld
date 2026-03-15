@@ -98,7 +98,7 @@ Use this path when you want to stay close to generated message types instead of 
 
 Current guidance:
 
-- Samsara support is strong around drivers, vehicles, HOS, GPS, DVIR, and feed cursor normalization
+- Samsara support is strong around drivers, vehicles, HOS, GPS, DVIR, feed cursor normalization, and raw geofence entry or exit webhook projection into canonical `geofenceEvents`
 - Motive support is strong around drivers, vehicles, HOS, GPS, and documented page-based sync semantics
 - Geotab support is strong around schema-backed duty status and feed/version-token workflows, with some fixtures derived from official object docs rather than static payload examples
 - KeepTruckin should be treated as a limited legacy compatibility path, not the default choice for new integrations

@@ -22,11 +22,13 @@ import {
   DutyStatus,
   EventOrigin,
   EventType,
+  GeofenceTransitionType,
   HosEventCode,
   HosRuleset,
   InspectionType,
   RecordStatus,
 } from "../../gen/ts/logistics/enums_pb";
+import { GeofenceEventSchema, type GeofenceEvent } from "../../gen/ts/logistics/geofence_event_pb";
 import { GpsLocationSchema } from "../../gen/ts/logistics/gps_location_pb";
 import {
   HosAnnotationSchema,
@@ -517,6 +519,7 @@ export function normalizeEldPayload(
   hosEventRecords: readonly EldHosEventRecord[],
   gpsLocationRecords: readonly EldGpsLocationRecord[],
   dvirRecords: readonly EldDvirRecord[],
+  geofenceEvents: readonly GeofenceEvent[] = [],
   warnings: readonly string[] = [],
 ) {
   const carrierId = metadata?.account?.carrierId ?? "docs-carrier";
@@ -540,6 +543,23 @@ export function normalizeEldPayload(
     dvirs: dvirRecords
       .map((record) => projectDvirRecord(provider, record, metadata))
       .filter((record) => record !== undefined),
+    geofenceEvents: geofenceEvents.map((event) =>
+      create(GeofenceEventSchema, {
+        geofenceEventId: event.geofenceEventId,
+        geofenceId: event.geofenceId,
+        geofenceName: event.geofenceName,
+        assetId: event.assetId,
+        vehicleId: event.vehicleId,
+        driverId: event.driverId,
+        transitionType:
+          event.transitionType || GeofenceTransitionType.UNSPECIFIED,
+        eventTime: event.eventTime,
+        position: event.position,
+        providerEventLabel: event.providerEventLabel,
+        source: event.source,
+        audit: event.audit,
+      }),
+    ),
     warnings: [...warnings],
   });
 }

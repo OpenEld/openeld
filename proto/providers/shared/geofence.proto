@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package openeld.providers.shared.v1;
+
+import "common/metadata/source.proto";
+import "common/primitives/location.proto";
+import "google/protobuf/timestamp.proto";
+import "logistics/enums.proto";
+import "logistics/geofence_event.proto";
+
+// * Represents a circular geofence definition from a provider payload.
+message ProviderGeofenceCircle {
+  double latitude = 1;
+  double longitude = 2;
+  uint32 radius_meters = 3;
+}
+
+// * Represents a polygon geofence definition from a provider payload.
+message ProviderGeofencePolygon {
+  repeated openeld.common.primitives.v1.GeoPoint vertices = 1;
+}
+
+// * Captures provider-native geofence metadata attached to a webhook event.
+message ProviderGeofenceReference {
+  optional string provider_geofence_id = 1;
+  optional string name = 2;
+  optional string formatted_address = 3;
+  map<string, string> external_ids = 4;
+  optional ProviderGeofenceCircle circle = 5;
+  optional ProviderGeofencePolygon polygon = 6;
+}
+
+// * Captures provider-native gateway or installed device identity.
+message ProviderGatewayReference {
+  optional string model = 1;
+  optional string serial = 2;
+}
+
+// * Captures provider-native asset identity attached to a webhook event.
+message ProviderAssetReference {
+  optional string provider_asset_id = 1;
+  optional string provider_vehicle_id = 2;
+  optional string provider_driver_id = 3;
+  optional string asset_type = 4;
+  optional string name = 5;
+  optional string license_plate = 6;
+  optional string vin = 7;
+  map<string, string> external_ids = 8;
+  optional ProviderGatewayReference gateway = 9;
+}
+
+// * Represents a raw provider geofence entry or exit webhook event.
+message ProviderGeofenceWebhookEvent {
+  string provider_event_id = 1;
+  optional google.protobuf.Timestamp event_time = 2;
+  openeld.logistics.v1.GeofenceTransitionType transition_type = 3;
+  optional string provider_event_type = 4;
+  optional string provider_webhook_id = 5;
+  optional string provider_organization_id = 6;
+  optional ProviderGeofenceReference geofence = 7;
+  optional ProviderAssetReference asset = 8;
+  optional openeld.common.primitives.v1.GeoPoint position = 9;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.logistics.v1.GeofenceEvent normalized_projection = 21;
+}

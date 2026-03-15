@@ -19,6 +19,7 @@ enum SyncResourceType {
   SYNC_RESOURCE_TYPE_IFTA_TRIPS = 9;
   SYNC_RESOURCE_TYPE_ASSETS = 10;
   SYNC_RESOURCE_TYPE_ASSET_LOCATIONS = 11;
+  SYNC_RESOURCE_TYPE_GEOFENCE_EVENTS = 12;
 }
 
 // * Represents the checkpoint style used by a provider resource.

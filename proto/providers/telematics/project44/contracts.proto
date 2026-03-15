@@ -3,6 +3,7 @@ syntax = "proto3";
 package openeld.providers.telematics.project44.v1;
 
 import "providers/telematics/shared/common.proto";
+import "providers/shared/geofence.proto";
 
 // * Groups the stable subset of Project44 records used by the normalization layer.
 message Project44Payload {
@@ -10,4 +11,5 @@ message Project44Payload {
   repeated openeld.providers.telematics.shared.v1.TelematicsPositionRecord positions = 2;
   repeated openeld.providers.telematics.shared.v1.TelematicsTripRecord trips = 3;
   optional openeld.providers.telematics.shared.v1.TelematicsSyncCheckpoint checkpoint = 4;
+  repeated openeld.providers.shared.v1.ProviderGeofenceWebhookEvent geofence_webhook_events = 5;
 }

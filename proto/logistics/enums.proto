@@ -164,6 +164,13 @@ enum SafetySeverity {
   SAFETY_SEVERITY_CRITICAL = 4;
 }
 
+// * Represents the normalized direction of a geofence transition.
+enum GeofenceTransitionType {
+  GEOFENCE_TRANSITION_TYPE_UNSPECIFIED = 0;
+  GEOFENCE_TRANSITION_TYPE_ENTRY = 1;
+  GEOFENCE_TRANSITION_TYPE_EXIT = 2;
+}
+
 // * Represents the type of non-powered or auxiliary asset being tracked.
 enum AssetType {
   ASSET_TYPE_UNSPECIFIED = 0;

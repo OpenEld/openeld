@@ -255,6 +255,7 @@ export const geotabProviderAdapter: ProviderAdapter<"geotab"> = {
       ),
       payload.logRecords.flatMap((record) => collectProjection(record.normalizedProjection)),
       payload.inspections.flatMap((record) => collectProjection(record.normalizedProjection)),
+      [],
       warnings,
     );
   },

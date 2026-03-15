@@ -5,6 +5,7 @@ package openeld.providers.eld.samsara.v1;
 import "common/primitives/location.proto";
 import "google/protobuf/timestamp.proto";
 import "providers/eld/shared/common.proto";
+import "providers/shared/geofence.proto";
 
 // * Represents a Samsara driver record close to the native API shape.
 message SamsaraDriverRecord {
@@ -107,4 +108,5 @@ message SamsaraPayload {
   repeated SamsaraDvirRecord dvirs = 8;
   repeated SamsaraDiagnosticRecord diagnostics = 9;
   repeated openeld.providers.eld.shared.v1.EldSyncCheckpoint checkpoints = 10;
+  repeated openeld.providers.shared.v1.ProviderGeofenceWebhookEvent geofence_webhook_events = 11;
 }

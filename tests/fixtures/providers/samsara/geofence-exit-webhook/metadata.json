@@ -1,0 +1,11 @@
+{
+  "provider": "samsara",
+  "endpoint": "webhooks/geofence-exit",
+  "sourceType": "official-docs",
+  "sourceUrl": "https://developers.samsara.com/docs/geofenceexit",
+  "captureDate": "2026-03-14",
+  "apiVersion": "webhooks-2.0-beta",
+  "authContext": "public-docs",
+  "sanitizationNotes": "Copied from the official Samsara GeofenceExit webhook payload example.",
+  "notes": "Official Beta webhook example for a geofence exit transition."
+}

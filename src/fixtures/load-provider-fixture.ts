@@ -26,6 +26,14 @@ export function loadSamsaraFixtureSet() {
     feedCursor: readProviderFixtureJson(
       "tests/fixtures/providers/samsara/feed-cursor/raw.json",
     ),
+    geofenceWebhookEvents: [
+      readProviderFixtureJson(
+        "tests/fixtures/providers/samsara/geofence-entry-webhook/raw.json",
+      ),
+      readProviderFixtureJson(
+        "tests/fixtures/providers/samsara/geofence-exit-webhook/raw.json",
+      ),
+    ],
   });
 }
 

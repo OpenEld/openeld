@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package openeld.logistics.v1;
+
+import "common/metadata/audit.proto";
+import "common/metadata/source.proto";
+import "common/primitives/location.proto";
+import "google/protobuf/timestamp.proto";
+import "logistics/enums.proto";
+
+// * Represents a normalized geofence transition event.
+message GeofenceEvent {
+  string geofence_event_id = 1;
+  optional string geofence_id = 2;
+  optional string geofence_name = 3;
+  optional string asset_id = 4;
+  optional string vehicle_id = 5;
+  optional string driver_id = 6;
+  GeofenceTransitionType transition_type = 7;
+  google.protobuf.Timestamp event_time = 8;
+  optional openeld.common.primitives.v1.GeoPoint position = 9;
+  optional string provider_event_label = 10;
+  optional openeld.common.metadata.v1.SourceRecord source = 20;
+  optional openeld.common.metadata.v1.AuditMetadata audit = 21;
+}

@@ -94,6 +94,11 @@ export function createQueryClient(invoker?: UnaryMethodInvoker) {
     ) {
       return call(QueryService.method.listAssetLocations, request);
     },
+    async listGeofenceEvents(
+      request: MessageInitShape<typeof QueryService.method.listGeofenceEvents.input>,
+    ) {
+      return call(QueryService.method.listGeofenceEvents, request);
+    },
     async listDvirs(
       request: MessageInitShape<typeof QueryService.method.listDvirs.input>,
     ) {

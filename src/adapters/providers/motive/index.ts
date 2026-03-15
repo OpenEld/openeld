@@ -339,6 +339,7 @@ export const motiveProviderAdapter: ProviderAdapter<"motive"> = {
         collectProjection(record.normalizedProjection),
       ),
       payload.dvirs.flatMap((record) => collectProjection(record.normalizedProjection)),
+      [],
       warnings,
     );
   },

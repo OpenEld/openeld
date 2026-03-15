@@ -18,6 +18,10 @@ const samsaraRaw = {
   ),
   dvirs: readJson<any>("tests/fixtures/providers/samsara/dvirs/raw.json"),
   feedCursor: readJson<any>("tests/fixtures/providers/samsara/feed-cursor/raw.json"),
+  geofenceWebhookEvents: [
+    readJson<any>("tests/fixtures/providers/samsara/geofence-entry-webhook/raw.json"),
+    readJson<any>("tests/fixtures/providers/samsara/geofence-exit-webhook/raw.json"),
+  ],
 };
 
 const motiveRaw = {
@@ -43,6 +47,8 @@ describe("OpenEld client", () => {
     expect(result.payload.$typeName).toBe("openeld.providers.eld.samsara.v1.SamsaraPayload");
     expect(result.response.drivers[0]?.driverId).toBe("88668");
     expect(result.response.gpsLocations[0]?.locationId).toBe("28147498");
+    expect(result.response.geofenceEvents).toHaveLength(2);
+    expect(result.response.geofenceEvents[0]?.geofenceId).toBe("494123");
     expect(result.warnings).toContain(
       "Samsara HOS clocks are captured in the provider payload but are not projected into the normalization response.",
     );

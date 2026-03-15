@@ -3,6 +3,7 @@ import { create } from "@bufbuild/protobuf";
 
 import { loadSamsaraFixtureSet } from "../../src/fixtures/load-provider-fixture";
 import { normalizeProviderPayload } from "../../src/services/normalization-service";
+import { GeofenceTransitionType } from "../../gen/ts/logistics/enums_pb";
 import {
   NormalizeProviderPayloadRequestSchema,
   NormalizeProviderPayloadResponseSchema,
@@ -35,6 +36,12 @@ describe("Samsara canonical fixtures", () => {
   const feedCursorMetadata = readJson<any>(
     "tests/fixtures/providers/samsara/feed-cursor/metadata.json",
   );
+  const geofenceEntryWebhookMetadata = readJson<any>(
+    "tests/fixtures/providers/samsara/geofence-entry-webhook/metadata.json",
+  );
+  const geofenceExitWebhookMetadata = readJson<any>(
+    "tests/fixtures/providers/samsara/geofence-exit-webhook/metadata.json",
+  );
 
   test("fixture provenance checks", () => {
     [
@@ -45,9 +52,13 @@ describe("Samsara canonical fixtures", () => {
       vehicleLocationsMetadata,
       dvirsMetadata,
       feedCursorMetadata,
+      geofenceEntryWebhookMetadata,
+      geofenceExitWebhookMetadata,
     ].forEach(expectOfficialDocsMetadata);
 
     expect(feedCursorMetadata.notes.includes("endCursor")).toBe(true);
+    expect(geofenceEntryWebhookMetadata.notes.includes("entry")).toBe(true);
+    expect(geofenceExitWebhookMetadata.notes.includes("exit")).toBe(true);
   });
 
   test("provider contract checks", () => {
@@ -70,6 +81,18 @@ describe("Samsara canonical fixtures", () => {
     expect(payload.dvirs[0]?.normalizedProjection?.defectDescriptions.length).toBe(
       1,
     );
+    expect(payload.geofenceWebhookEvents[0]?.providerEventType).toBe(
+      "GeofenceEntry",
+    );
+    expect(payload.geofenceWebhookEvents[0]?.normalizedProjection?.transitionType).toBe(
+      GeofenceTransitionType.ENTRY,
+    );
+    expect(payload.geofenceWebhookEvents[1]?.providerEventType).toBe(
+      "GeofenceExit",
+    );
+    expect(payload.geofenceWebhookEvents[1]?.source?.rawPayloadJson?.includes("\"eventType\":\"GeofenceExit\"")).toBe(
+      true,
+    );
   });
 
   test("canonical golden checks", () => {
@@ -91,6 +114,13 @@ describe("Samsara canonical fixtures", () => {
     expect(normalized.vehicles[0]?.vehicleId).toBe("28147498");
     expect(normalized.hosEvents[0]?.driverId).toBe("88668");
     expect(normalized.gpsLocations[0]?.vehicleId).toBe("28147498");
+    expect(normalized.geofenceEvents[0]?.geofenceId).toBe("494123");
+    expect(normalized.geofenceEvents[0]?.transitionType).toBe(
+      GeofenceTransitionType.ENTRY,
+    );
+    expect(normalized.geofenceEvents[1]?.transitionType).toBe(
+      GeofenceTransitionType.EXIT,
+    );
     expect(normalized.warnings).toContain(
       "Samsara HOS clocks are captured in the provider payload but are not projected into the normalization response.",
     );

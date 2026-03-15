@@ -8,6 +8,7 @@ import "logistics/carrier.proto";
 import "logistics/data_consent.proto";
 import "logistics/driver.proto";
 import "logistics/dvir.proto";
+import "logistics/geofence_event.proto";
 import "logistics/gps_location.proto";
 import "logistics/hos_daily_summary.proto";
 import "logistics/hos_event.proto";
@@ -54,6 +55,7 @@ message NormalizeProviderPayloadResponse {
   repeated openeld.logistics.v1.Asset assets = 11;
   repeated openeld.logistics.v1.AssetLocation asset_locations = 12;
   repeated openeld.logistics.v1.DataConsent data_consents = 13;
+  repeated openeld.logistics.v1.GeofenceEvent geofence_events = 15;
   repeated string warnings = 14;
 }
 

@@ -9,7 +9,7 @@ If you are using the package as an SDK consumer, read [`../concepts/schema-and-g
 ## Package Layout
 
 - `common/` contains reusable primitives, units, source metadata, and audit metadata
-- `logistics/` contains the normalized canonical model for carriers, drivers, vehicles, assignments, HOS, GPS, DVIR, consent, safety, IFTA, and assets
+- `logistics/` contains the normalized canonical model for carriers, drivers, vehicles, assignments, HOS, GPS, DVIR, consent, safety, IFTA, assets, and geofence events
 - `providers/` contains provider-native payload contracts grouped by ELD and telematics source
 - `services/` contains RPC-ready ingestion, normalization, query, and sync APIs
 - `v1/openeld.proto` is the aggregate import surface for the current schema version
@@ -29,4 +29,5 @@ If you are using the package as an SDK consumer, read [`../concepts/schema-and-g
 - source metadata is attached to records for traceability back to native provider payloads
 - distances, speed, engine hours, timestamps, and coordinates use normalized units defined in the schema
 - consent, safety, IFTA, and asset tracking are part of the canonical `v1` model
+- raw provider geofence webhook events stay separate from canonical `GeofenceEvent` messages and preserve source payload JSON in `SourceRecord.raw_payload_json`
 - Catena-inspired domains are exposed through the canonical schema and query APIs without implying broad local provider runtime coverage

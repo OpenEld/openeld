@@ -9,6 +9,8 @@ import {
   GeoPointSchema,
   LocationDescriptionSchema,
 } from "../../../../gen/ts/common/primitives/location_pb";
+import { GeofenceTransitionType } from "../../../../gen/ts/logistics/enums_pb";
+import { GeofenceEventSchema } from "../../../../gen/ts/logistics/geofence_event_pb";
 import {
   EldAuthProfileSchema,
   EldDriverRecordSchema,
@@ -23,6 +25,14 @@ import {
   EldSyncProfileSchema,
   EldVehicleRecordSchema,
 } from "../../../../gen/ts/providers/eld/shared/common_pb";
+import {
+  ProviderAssetReferenceSchema,
+  ProviderGatewayReferenceSchema,
+  ProviderGeofenceCircleSchema,
+  ProviderGeofencePolygonSchema,
+  ProviderGeofenceReferenceSchema,
+  ProviderGeofenceWebhookEventSchema,
+} from "../../../../gen/ts/providers/shared/geofence_pb";
 import {
   SamsaraDiagnosticRecordSchema,
   SamsaraDriverRecordSchema,
@@ -63,6 +73,7 @@ function createSamsaraSourceRecord(
   recordType: string,
   primaryExternalId: string,
   nativeStatus?: string,
+  rawPayloadJson?: string,
 ) {
   return create(SourceRecordSchema, {
     provider: SourceProvider.SAMSARA,
@@ -70,6 +81,7 @@ function createSamsaraSourceRecord(
     providerRecordType: recordType,
     primaryExternalId,
     nativeStatus,
+    rawPayloadJson,
   });
 }
 
@@ -85,6 +97,7 @@ export function buildSamsaraPayload(fixtures: {
   vehicleLocations: any;
   dvirs: any;
   feedCursor: any;
+  geofenceWebhookEvents?: any[];
 }): SamsaraPayload {
   const cursor = fixtures.feedCursor?.pagination?.endCursor;
   const hasMore = fixtures.feedCursor?.pagination?.hasNextPage ?? false;
@@ -324,6 +337,96 @@ export function buildSamsaraPayload(fixtures: {
         cursor,
       }),
     ],
+    geofenceWebhookEvents: (fixtures.geofenceWebhookEvents ?? []).map((event: any) => {
+      const address = event.data?.address ?? {};
+      const geofence = address.geofence ?? {};
+      const vehicle = event.data?.vehicle ?? {};
+      const transitionType =
+        event.eventType === "GeofenceExit"
+          ? GeofenceTransitionType.EXIT
+          : GeofenceTransitionType.ENTRY;
+
+      return create(ProviderGeofenceWebhookEventSchema, {
+        providerEventId: String(event.eventId),
+        eventTime: createTimestampFromIso(event.eventTime),
+        transitionType,
+        providerEventType: event.eventType,
+        providerWebhookId: event.webhookId ? String(event.webhookId) : undefined,
+        providerOrganizationId:
+          event.orgId !== undefined ? String(event.orgId) : undefined,
+        geofence: create(ProviderGeofenceReferenceSchema, {
+          providerGeofenceId: address.id ? String(address.id) : undefined,
+          name: address.name,
+          formattedAddress: address.formattedAddress,
+          externalIds: address.externalIds ?? {},
+          circle:
+            typeof geofence.circle?.latitude === "number" &&
+            typeof geofence.circle?.longitude === "number" &&
+            typeof geofence.circle?.radiusMeters === "number"
+              ? create(ProviderGeofenceCircleSchema, {
+                  latitude: geofence.circle.latitude,
+                  longitude: geofence.circle.longitude,
+                  radiusMeters: geofence.circle.radiusMeters,
+                })
+              : undefined,
+          polygon:
+            Array.isArray(geofence.polygon?.vertices) &&
+            geofence.polygon.vertices.length > 0
+              ? create(ProviderGeofencePolygonSchema, {
+                  vertices: geofence.polygon.vertices
+                    .filter(
+                      (vertex: any) =>
+                        typeof vertex?.latitude === "number" &&
+                        typeof vertex?.longitude === "number",
+                    )
+                    .map((vertex: any) =>
+                      create(GeoPointSchema, {
+                        latitude: vertex.latitude,
+                        longitude: vertex.longitude,
+                      }),
+                    ),
+                })
+              : undefined,
+        }),
+        asset: create(ProviderAssetReferenceSchema, {
+          providerAssetId: vehicle.id ? String(vehicle.id) : undefined,
+          providerVehicleId: vehicle.id ? String(vehicle.id) : undefined,
+          assetType: vehicle.assetType,
+          name: vehicle.name,
+          licensePlate: vehicle.licensePlate,
+          vin: vehicle.vin,
+          externalIds: vehicle.externalIds ?? {},
+          gateway:
+            vehicle.gateway?.model || vehicle.gateway?.serial
+              ? create(ProviderGatewayReferenceSchema, {
+                  model: vehicle.gateway?.model,
+                  serial: vehicle.gateway?.serial,
+                })
+              : undefined,
+        }),
+        source: createSamsaraSourceRecord(
+          "geofence_webhook_event",
+          String(event.eventId),
+          event.eventType,
+          JSON.stringify(event),
+        ),
+        normalizedProjection: create(GeofenceEventSchema, {
+          geofenceEventId: String(event.eventId),
+          geofenceId: address.id ? String(address.id) : undefined,
+          geofenceName: address.name,
+          vehicleId: vehicle.id ? String(vehicle.id) : undefined,
+          transitionType,
+          eventTime: createTimestampFromIso(event.eventTime),
+          providerEventLabel: event.eventType,
+          source: createSamsaraSourceRecord(
+            "geofence_webhook_event",
+            String(event.eventId),
+            event.eventType,
+            JSON.stringify(event),
+          ),
+        }),
+      });
+    }),
   });
 }
 
@@ -349,6 +452,9 @@ export const samsaraProviderAdapter: ProviderAdapter<"samsara"> = {
         collectProjection(record.normalizedProjection),
       ),
       payload.dvirs.flatMap((record) => collectProjection(record.normalizedProjection)),
+      payload.geofenceWebhookEvents.flatMap((record) =>
+        collectProjection(record.normalizedProjection),
+      ),
       warnings,
     );
   },
